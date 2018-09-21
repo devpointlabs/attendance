@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import NoMatch from './NoMatch';
 import NavBar from './NavBar';
 import Login from './Login';
+import Register from './Register';
 import Flash from './Flash';
 import Home from './Home';
 import ProtectedRoute from './ProtectedRoute';
@@ -10,6 +11,7 @@ import AuthRoute from './AuthRoute';
 import AdminRoute from './AdminRoute';
 import FetchUser from './FetchUser';
 import Settings  from './Settings';
+import ResetPW from './ResetPW';
 
 class App extends Component {
   render() {
@@ -22,6 +24,8 @@ class App extends Component {
             <ProtectedRoute exact path='/' component={Home} />
             <AdminRoute exact path='/settings' component={Settings} />
             <AuthRoute exact path='/login' component={Login} />
+            <AuthRoute exact path='/register' component={Register} />
+            <AuthRoute exact path='/api/auth/password/edit' component={ResetPW} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>

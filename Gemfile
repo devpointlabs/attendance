@@ -18,6 +18,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'factory_bot_rails'
   gem 'dotenv-rails'
+  gem 'letter_opener'
 end
 
 group :development do

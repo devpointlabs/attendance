@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   namespace :api do
     resources :courses
     get 'init_courses/:id', to: 'courses#init'
+    post 'register', to: 'passwords#reset'
+    post '/reset_password', to: 'passwords#reset_password'
   end
 
   #Do not place any routes below this one

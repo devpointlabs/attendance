@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Container, Form, Divider, Dimmer, Loader, Segment } from 'semantic-ui-react';
+import { Header, Container, Form, Divider, Dimmer, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { Flex } from './CommonStyles';
