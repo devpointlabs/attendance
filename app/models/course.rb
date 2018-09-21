@@ -2,6 +2,14 @@ class Course < ApplicationRecord
   has_many :enrollments, dependent: :destroy
   has_many :users, through: :enrollments
 
+  def self.with_enrollments(course_id)
+    select('e.id, u.name, u.image, e.role, e.user_id')
+    .joins('INNER JOIN enrollments e ON e.course_id = courses.id')
+    .joins('INNER JOIN users u on u.id = e.user_id')
+    .where("courses.id = #{course_id}")
+    .order('u.name')
+  end
+
   def self.with_enrollment(user_id)
     select('DISTINCT(courses.id), courses.name, e.role, courses.canvas_id')
     .joins("INNER JOIN enrollments e ON e.course_id = courses.id 

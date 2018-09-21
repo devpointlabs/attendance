@@ -10,3 +10,4 @@ export const Flex = styled.div`
   flex-direction: ${ props => props.direction || 'row' };
   padding-top: ${ props => props.paddingTop || 0 }px;
 `
+

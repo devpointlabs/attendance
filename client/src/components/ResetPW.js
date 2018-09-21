@@ -52,7 +52,7 @@ class ResetPW extends React.Component {
   }
 
   render() {
-    const { valid, loading, password, passwordConfirmation, error, isReset } = this.state
+    const { loading, password, passwordConfirmation, error, isReset } = this.state
 
     if (loading) {
       return (

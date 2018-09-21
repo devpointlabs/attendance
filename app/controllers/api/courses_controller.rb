@@ -7,6 +7,15 @@ class Api::CoursesController < ApplicationController
     end
   end
 
+  def show 
+    users = Course.with_enrollments(params[:id])
+    if current_user.is_admin || users.find { |u| u.user_id === current_user.id }
+      render json: users.select { |u| u.role == 'student' }
+    else
+      render json: 'restricted', status: 422
+    end
+  end
+
   def init
     id = params[:id].to_i
     data = Course.init_course(id)

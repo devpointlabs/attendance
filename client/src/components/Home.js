@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import axios from 'axios'
-import { Card, Header, Container } from 'semantic-ui-react'
+import { Card, Header, Container, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { roles } from '../utils/strHelper'
 
@@ -16,7 +16,9 @@ class Home extends React.Component {
     const { courses } = this.state
     return (
       <Container>
+        <Divider hidden />
         <Header as="h1" textAlign="center">Courses</Header>
+        <Divider />
         <Card.Group itemsPerRow={4} stackable>
           { courses.map( c => {
               const { name, id, role = 'admin' } = c
