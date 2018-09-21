@@ -19,7 +19,7 @@ class Home extends React.Component {
         <Header as="h1" textAlign="center">Courses</Header>
         <Card.Group itemsPerRow={4} stackable>
           { courses.map( c => {
-              const { name, id, role } = c
+              const { name, id, role = 'admin' } = c
               const userRole = roles[role]
               return (
                 <Card key={id}>

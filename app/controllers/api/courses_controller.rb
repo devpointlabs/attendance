@@ -1,6 +1,10 @@
 class Api::CoursesController < ApplicationController
   def index
-    render json: Course.with_enrollment(current_user.id)
+    if current_user.is_admin
+      render json: Course.order(canvas_id: :desc)
+    else
+      render json: Course.with_enrollment(current_user.id)
+    end
   end
 
   def init

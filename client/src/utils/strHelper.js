@@ -1,5 +1,6 @@
 export const roles = {
   teacher: 'Teacher',
   ta: 'TA',
-  student: 'Student'
+  student: 'Student',
+  admin: 'Admin',
 }
