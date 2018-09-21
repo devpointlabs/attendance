@@ -1,6 +1,13 @@
 class Course < ApplicationRecord
   has_many :enrollments, dependent: :destroy
-  has_many :courses, through: :enrollments
+  has_many :users, through: :enrollments
+
+  def self.with_enrollment(user_id)
+    select('DISTINCT(courses.id), courses.name, e.role, courses.canvas_id')
+    .joins("INNER JOIN enrollments e ON e.course_id = courses.id 
+            AND e.user_id = #{user_id}")
+    .order('courses.canvas_id DESC')
+  end
 
   def self.init_course(id)
     counts = { users: 0, enrollments: 0, errors: [], status: 200, name: '' }
@@ -32,7 +39,7 @@ class Course < ApplicationRecord
           end
         end
       end
-        counts
+      counts
     rescue => e
       counts[:errors] << e
       counts[:status] = 422
