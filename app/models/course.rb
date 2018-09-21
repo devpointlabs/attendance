@@ -1,6 +1,7 @@
 class Course < ApplicationRecord
   has_many :enrollments, dependent: :destroy
   has_many :users, through: :enrollments
+  has_many :records
 
   def self.with_enrollments(course_id)
     select('e.id, u.name, u.image, e.role, e.user_id')
