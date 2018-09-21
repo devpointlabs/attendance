@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Container, Divider, List, Image, Icon } from 'semantic-ui-react'
+import { Header, Button, Container, Divider, List, Image, Icon } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
@@ -56,9 +56,9 @@ class Course extends React.Component {
     const dateString = date.toLocaleDateString()
     const today = dateString === new Date().toLocaleDateString()
     return (
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" alignItems="center">
         <Arrow onClick={this.dateMinus} name="chevron left" />
-        <p>{dateString}</p>
+        <Header as="h2">{dateString}</Header>
         <Arrow onClick={this.datePlus} name="chevron right" />
         { !today && <Button primary onClick={this.today}>Today</Button> }
       </Flex>
