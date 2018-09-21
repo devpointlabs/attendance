@@ -26,7 +26,9 @@ class Marks extends React.Component {
   }
 
   updateRecord = (status) => {
-    this.setState({ status }) 
+    this.setState({ status }, () => {
+      this.props.markUser(this.props.id, status)
+    }) 
   }
 
   render() {

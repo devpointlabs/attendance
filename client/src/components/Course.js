@@ -55,6 +55,12 @@ class Course extends React.Component {
     )
   }
 
+  markUser = (id, status) => {
+    const { date } = this.state
+    axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
+      .then( res => {/* TODO update user record */ } ) 
+  }
+
   render() {
     const { users, user, restricted } = this.state
     if (restricted) {
@@ -76,7 +82,7 @@ class Course extends React.Component {
                     </List.Header>
                   </List.Content>
                   <List.Content floated="right">
-                    <Marks status={user.status} />
+                    <Marks status={user.status} id={user.id} markUser={this.markUser} />
                   </List.Content>
                 </List.Item>
               )

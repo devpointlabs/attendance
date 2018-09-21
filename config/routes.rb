@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'init_courses/:id', to: 'courses#init'
     post 'register', to: 'passwords#reset'
     post '/reset_password', to: 'passwords#reset_password'
+    resources :records, only: :create
   end
 
   #Do not place any routes below this one
