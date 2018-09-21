@@ -9,14 +9,27 @@ class NavBar extends Component {
     const { user, dispatch, history } = this.props;
 
     if (user.id) {
-      return (
-        <Menu.Menu position='right'>
+      const auth = ['settings']
+      const authLinks = auth.map( a => 
+        <Link to={`/${a}`} key={a}>
+            <Menu.Item name={a} />
+        </Link>
+      )
+
+      const links = [
           <Menu.Item
-            name='Logout'
+            key="logout"
+            name="Logout"
             onClick={() => dispatch(handleLogout(history))}
           />
+      ]
+
+      const combined = user.is_admin ? [...authLinks, ...links] : links
+      return (
+        <Menu.Menu position="right">
+          { combined }
         </Menu.Menu>
-      );
+      )
     }
     return (
       <Menu.Menu position='right'>

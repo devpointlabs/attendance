@@ -7,7 +7,9 @@ import Flash from './Flash';
 import Home from './Home';
 import ProtectedRoute from './ProtectedRoute';
 import AuthRoute from './AuthRoute';
+import AdminRoute from './AdminRoute';
 import FetchUser from './FetchUser';
+import Settings  from './Settings';
 
 class App extends Component {
   render() {
@@ -17,7 +19,8 @@ class App extends Component {
         <Flash />
         <FetchUser>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <ProtectedRoute exact path='/' component={Home} />
+            <AdminRoute exact path='/settings' component={Settings} />
             <AuthRoute exact path='/login' component={Login} />
             <Route component={NoMatch} />
           </Switch>
