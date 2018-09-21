@@ -11,30 +11,41 @@ const Arrow = styled(Icon)`
 `
 
 class Course extends React.Component {
-  state = { users: [], user: {}, restricted: false, date: new Date() }
+  state = { users: [], user: {}, restricted: false, date: new Date(), records: [] }
 
   componentDidMount() {
     const { id } = this.props.match.params
     axios.get(`/api/courses/${id}`)
-      .then( res => this.setState({ users: res.data }) )
+      .then( res => { 
+        this.setState({ users: res.data }, () => {
+          this.getAttendanceByDate()
+        }) 
+      })
       .catch( err => {
         if (err.response.data === 'restricted')
           this.setState({ restricted: true })
       })
   }
 
+  getAttendanceByDate = () => {
+    const { date } = this.state
+    const { id } = this.props.match.params
+    axios.post(`/api/records/${id}/by_date/`, { date: date.toLocaleDateString() } )
+      .then( res => this.setState({ records: res.data }) )
+  }
+
   datePlus = () => {
     const { date } = this.state
     const tomorrow = date
     tomorrow.setDate(tomorrow.getDate() + 1);
-    this.setState({ date: tomorrow })
+    this.setState({ date: tomorrow }, () => this.getAttendanceByDate() )
   }
 
   dateMinus = () => {
     const { date } = this.state
     const yesterday = date
     yesterday.setDate(yesterday.getDate() - 1);
-    this.setState({ date: yesterday })
+    this.setState({ date: yesterday }, () => this.getAttendanceByDate() )
   }
 
   today = () => {
@@ -58,11 +69,28 @@ class Course extends React.Component {
   markUser = (id, status) => {
     const { date } = this.state
     axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
-      .then( res => {/* TODO update user record */ } ) 
+      .then( res => { 
+        const records = this.state.records.map( r => {
+          if (r.id === id) 
+            return { ...r, status: res.data.status }
+          return r
+        })
+
+        this.setState({ records })
+      })
+  }
+
+  checkStatus = (user_id) => {
+    const { records } = this.state
+    const record = records.find( r => r.id === user_id )
+    if (record)
+      return record.status
+    else
+      return ''
   }
 
   render() {
-    const { users, user, restricted } = this.state
+    const { users, user, restricted, records } = this.state
     if (restricted) {
       return <Redirect to="/" />
     } else if (user.id) {
@@ -82,7 +110,7 @@ class Course extends React.Component {
                     </List.Header>
                   </List.Content>
                   <List.Content floated="right">
-                    <Marks status={user.status} id={user.id} markUser={this.markUser} />
+                    <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
                   </List.Content>
                 </List.Item>
               )

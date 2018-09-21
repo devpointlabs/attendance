@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     post 'register', to: 'passwords#reset'
     post '/reset_password', to: 'passwords#reset_password'
     resources :records, only: :create
+    post '/records/:course_id/by_date', to: 'records#date'
   end
 
   #Do not place any routes below this one
