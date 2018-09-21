@@ -4,12 +4,7 @@ import { Header, Button, Container, Divider, List, Image, Icon } from 'semantic-
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
-
-const Mark = styled(Icon)`
-  cursor: pointer;
-  margin-left: 20px !important;
-  font-size: 2em !important;
-`
+import Marks from './Marks'
 
 const Arrow = styled(Icon)`
   cursor: pointer;
@@ -26,11 +21,6 @@ class Course extends React.Component {
         if (err.response.data === 'restricted')
           this.setState({ restricted: true })
       })
-  }
-
-  icons = () => {
-    const actions = ['check', 'times', 'clock outline', 'edit']
-    return actions.map( action => <Mark key={action} name={action} size="small"/> )
   }
 
   datePlus = () => {
@@ -86,7 +76,7 @@ class Course extends React.Component {
                     </List.Header>
                   </List.Content>
                   <List.Content floated="right">
-                    { this.icons() }
+                    <Marks status={user.status} />
                   </List.Content>
                 </List.Item>
               )
