@@ -127,7 +127,7 @@ class Student extends React.Component {
                 </List>
               </Card.Content>
             </Card>
-            { hasData && this.chart({ absent, tardy, present, excused }) }
+            { this.chart({ absent, tardy, present, excused }) }
           </Flex>
           <List divided>
             { records.map( r => {
