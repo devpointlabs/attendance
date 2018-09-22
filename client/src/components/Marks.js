@@ -20,9 +20,8 @@ class Marks extends React.Component {
   ]
 
   static getDerivedStateFromProps(props, state) {
-    if (props.status && props.status !== state.status)
+    if (props.status !== state.status)
       return { status: props.status }
-    return null
   }
 
   updateRecord = (status) => {
