@@ -15,18 +15,11 @@ class Api::RecordsController < ApplicationController
   def individual
     enrollment = Course.find(params[:course_id]).enrollments.find(params[:id])
     user = enrollment.user
-    records = enrollment.records
-    present = records.where(status: 'present').length rescue 0 
-    absent = records.where(status: 'absent').length rescue 0
-    tardy = records.where(status: 'tardy').length rescue 0
-    excused = records.where(status: 'excused').length rescue 0
+    records = enrollment.records.order(day: :desc)
     render json: { 
       name: user.name, 
       image: user.image, 
-      present: present, 
-      absent: absent, 
-      excused: excused, 
-      tardy: tardy
+      records: records
     }
   end
 end

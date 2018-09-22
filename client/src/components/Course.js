@@ -116,14 +116,17 @@ class Course extends React.Component {
       return (
         <Container>
           <Divider hidden />
-          { this.datePicker() }
+          { !individualView && this.datePicker() }
           { individualView ?
-            <Fragment>
-              <Student courseId={id} user={individualView} />
+            <Flex>
               <Permission role="isStaff" user={currentUser}>
-                <Button onClick={() => this.setIndividualView(null) }>Show All</Button>
+                <Divider hidden/>
+                <Button onClick={() => this.setIndividualView(null) }>
+                  <Icon name="chevron left" />
+                </Button>
               </Permission>
-            </Fragment>
+              <Student courseId={id} user={individualView} />
+            </Flex>
             :
             <List celled verticalAlign="middle">
               { users.map( user => 

@@ -13,12 +13,25 @@ class Student extends React.Component {
       .then( res => this.setState({ user: res.data }) )
   }
 
+  calcTotals = () => {
+    const { user: { records = [] }  } = this.state
+    const statuses = ['present', 'absent', 'tardy', 'excused']
+    const totals = { present: 0, absent: 0, tardy: 0, excused: 0 }
+    for ( const status of statuses ) {
+      totals[status] = records.filter( r => r.status === status ).length
+    }
+
+    return totals
+  }
+
   render() {
     const { user } = this.state
+    const { present, absent, tardy, excused } = this.calcTotals()
+    const records = user.records || []
     return (
       <Container>
-          <Flex justifyContent="center">
-            <Image avatar src={user.image} size="medium"/>
+          <Flex justifyContent="space-around">
+            <Image src={user.image} size="medium"/>
             <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
@@ -32,7 +45,7 @@ class Student extends React.Component {
                           Present: 
                         </span>
                         <span>
-                          {user.present}
+                          {present}
                         </span>
                       </Flex>
                     </List.Header>
@@ -44,7 +57,7 @@ class Student extends React.Component {
                           Absent: 
                         </span>
                         <span>
-                          {user.absent}
+                          {absent}
                         </span>
                       </Flex>
                     </List.Header>
@@ -56,7 +69,7 @@ class Student extends React.Component {
                           Tardy: 
                         </span>
                         <span>
-                          {user.tardy}
+                          {tardy}
                         </span>
                       </Flex>
                     </List.Header>
@@ -68,7 +81,7 @@ class Student extends React.Component {
                           Excused: 
                         </span>
                         <span>
-                          {user.excused}
+                          {excused}
                         </span>
                       </Flex>
                     </List.Header>
@@ -77,6 +90,17 @@ class Student extends React.Component {
               </Card.Content>
             </Card>
           </Flex>
+          <List divided>
+            { records.map( r => {
+                return (
+                  <List.Item key={r}>
+                    <List.Header>Status: {r.status}</List.Header>
+                    <List.Description>Date: {new Date(r.day).toLocaleDateString()}</List.Description>
+                  </List.Item>
+                )
+              })
+            }
+          </List>
       </Container>
     )
   }
