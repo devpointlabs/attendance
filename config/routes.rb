@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'init_courses/:id', to: 'courses#init'
     post 'register', to: 'passwords#reset'
     post '/reset_password', to: 'passwords#reset_password'
+    post '/records/:course_id/all_present', to: 'records#all_present'
     resources :records, only: :create
     post '/records/:course_id/by_date', to: 'records#date'
     get '/records/:course_id/users/:id', to: 'records#individual'

@@ -8,6 +8,21 @@ class Api::RecordsController < ApplicationController
     render json: r.reload
   end
 
+  def all_present
+    course = Course.find(params[:course_id])
+    date = Date::strptime(params[:date], "%m/%d/%Y")
+    enrollments = course.enrollments.where(role: 'student')
+    records = []
+    enrollments.each do |e|
+      record = Record.find_or_create_by(day: date, enrollment_id: e.id)
+      record.status = 'present'
+      record.save
+      records << { id: e.id, status: 'present' }
+    end
+
+    render json: records
+  end
+
   def date
     records = Record.by_course(params[:course_id], params[:date])
     render json: records

@@ -75,9 +75,21 @@ class Course extends React.Component {
         <Arrow onClick={this.dateMinus} name="chevron left" />
         <Header as="h2">{dateString}</Header>
         <Arrow onClick={this.datePlus} name="chevron right" />
-        { !today && <Button primary onClick={this.today}>Today</Button> }
+        <Flex>
+          { !today && <Button primary onClick={this.today}>Today</Button> }
+          <Button onClick={this.markAll} color="green">
+            All Present
+          </Button>
+        </Flex>
       </Flex>
     )
+  }
+
+  markAll = () => {
+    const { date } = this.state
+    const { id } = this.props.match.params
+    axios.post(`/api/records/${id}/all_present`, { date: date.toLocaleDateString() })
+      .then( res => this.setState({ records: res.data }) )
   }
 
   markUser = (id, status) => {
