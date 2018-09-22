@@ -18,7 +18,9 @@ class Course extends React.Component {
     const { id } = this.props.match.params
     axios.get(`/api/courses/${id}`)
       .then( res => { 
-        this.setState({ users: res.data.users, currentUser: res.data.user }, () => {
+        const { user, users } = res.data
+        const visibleUsers = user.role === 'student' ? [users.find( u => u.id === user.id)] : users
+        this.setState({ users: visibleUsers , currentUser: user }, () => {
           this.getAttendanceByDate()
         }) 
       })
