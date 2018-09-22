@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Divider, Input, Button, List, Image } from 'semantic-ui-react'
+import { Container, Divider, Input, Button, List, Image } from 'semantic-ui-react'
 import axios from 'axios'
 import Student from './Student'
 import styled from 'styled-components'
@@ -69,7 +69,7 @@ class Students extends React.Component {
   render() {
     const { name, filtered, student } = this.state
     return (
-      <Fragment>
+      <Container>
         { student.id ? 
             <Fragment>
               <Divider hidden />
@@ -119,7 +119,7 @@ class Students extends React.Component {
               </List>
             </Fragment>
         }
-      </Fragment>
+      </Container>
     )
   }
 
