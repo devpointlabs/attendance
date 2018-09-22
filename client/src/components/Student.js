@@ -70,7 +70,7 @@ class Student extends React.Component {
     const hasData = ( present + absent + tardy + excused ) > 0
     return (
       <Container>
-          <Flex justifyContent="space-around">
+          <Flex justifyContent="space-around" flexWrap="wrap">
             <Image src={user.image} size="medium"/>
             <Card>
               <Card.Content>
