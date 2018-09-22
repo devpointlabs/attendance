@@ -6,10 +6,10 @@ import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 
 const colors = { 
-  present: '#d4edda',
-  absent: '#f8d7da',
-  tardy: '#fff3cd',
-  excused: '#d1ecf1',
+  present: '#c3e6cb',
+  absent: '#f5c6cb',
+  tardy: '#ffeeba',
+  excused: '#bee5eb',
 }
 
 
