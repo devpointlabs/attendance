@@ -2,7 +2,8 @@ class Api::RecordsController < ApplicationController
   def create
     date = Date::strptime(params[:date], "%m/%d/%Y")
     r = Record.find_or_create_by(day: date, enrollment_id: params[:id])
-    r.update(status: params[:status])
+    status = r.status == params[:status] ? '' : params[:status]
+    r.update(status: status)
 
     render json: r.reload
   end

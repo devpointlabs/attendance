@@ -82,10 +82,10 @@ class Course extends React.Component {
 
   markUser = (id, status) => {
     const { date } = this.state
+    const recs = this.state.records
+    const existing = recs.find( r => r.id === id )
     axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
       .then( res => { 
-        const recs = this.state.records
-        const existing = recs.find( r => r.id === id )
         let records
           if (existing) {
             records = recs.map( r => {
