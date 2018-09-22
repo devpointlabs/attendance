@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Divider, Container, Card, List, Image } from 'semantic-ui-react'
+import { Divider, Container, Card, List, Image, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
@@ -19,12 +19,22 @@ const Item = styled(List.Item)`
 `
 
 class Student extends React.Component {
-  state = { user: {}, Image }
+  state = { user: {}, Image, filter: 'all' }
 
   componentDidMount() {
     const { courseId, user } = this.props
     axios.get(`/api/records/${courseId}/users/${user}`) 
       .then( res => this.setState({ user: res.data }) )
+  }
+
+  setFilter = (filter = 'all') => {
+    this.setState({ filter })
+  }
+
+  dropdownOptions = () => {
+    return ['All', 'Present', 'Absent', 'Tardy', 'Exused'].map( text => {
+      return { key: text, text, value: text.toLowerCase() }
+    })
   }
 
   calcTotals = () => {
@@ -64,8 +74,15 @@ class Student extends React.Component {
     )
   }
 
+  filtered = (records) => {
+    const { filter: currentFilter } = this.state
+    if (currentFilter === 'all')
+      return records
+    return records.filter( r => r.status === currentFilter )
+  }
+
   render() {
-    const { user } = this.state
+    const { user, filter } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
     return (
@@ -130,8 +147,14 @@ class Student extends React.Component {
             </Card>
             { this.chart({ absent, tardy, present, excused }) }
           </Flex>
+          <Dropdown 
+            options={this.dropdownOptions()} 
+            value={filter}
+            onChange={ (_, {value}) => this.setFilter(value) }
+            label="Filter"
+          />
           <List divided>
-            { records.map( r => {
+            { this.filtered(records).map( r => {
                 return (
                   <Item key={r.id} status={r.status}>
                     <Flex justifyContent="space-between">
