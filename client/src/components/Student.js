@@ -3,24 +3,18 @@ import axios from 'axios'
 import { Container, Card, List, Image } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
+import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 
-const getColor = (status) => {
-  switch(status) {
-    case 'present':
-      return '#d4edda'
-    case 'absent':
-      return '#f8d7da'
-    case 'tardy':
-      return '#fff3cd'
-    case 'excused':
-      return '#d1ecf1'
-    default:
-      return '#fff'
-  }
+const colors = { 
+  present: '#d4edda',
+  absent: '#f8d7da',
+  tardy: '#fff3cd',
+  excused: '#d1ecf1',
 }
 
+
 const Item = styled(List.Item)`
-  background-color: ${ props => getColor(props.status) };
+  background-color: ${ props => colors[props.status] };
   padding: 5px 5px !important;
 `
 
@@ -44,10 +38,36 @@ class Student extends React.Component {
     return totals
   }
 
+  chart = ({ absent, present, tardy, excused }) => {
+    const data = [
+      { name: 'Present', value: present },
+      { name: 'Absent', value: absent },
+      { name: 'Tardy', value: tardy },
+      { name: 'Excused', value: excused },
+    ]
+
+    return (
+      <PieChart width={400} height={400}>
+        <Pie 
+          data={data} 
+          cx={200} 
+          cy={200} 
+          outerRadius={80} 
+          fill="#8884d8" 
+          label
+        >
+          { data.map((entry, index) => <Cell fill={colors[entry.name.toLowerCase()]} /> )}
+        </Pie>
+        <Tooltip />
+      </PieChart>
+    )
+  }
+
   render() {
     const { user } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
+    const hasData = ( present + absent + tardy + excused ) > 0
     return (
       <Container>
           <Flex justifyContent="space-around">
@@ -109,11 +129,12 @@ class Student extends React.Component {
                 </List>
               </Card.Content>
             </Card>
+            { hasData && this.chart({ absent, tardy, present, excused }) }
           </Flex>
           <List divided>
             { records.map( r => {
                 return (
-                  <Item key={r} status={r.status}>
+                  <Item key={r.id} status={r.status}>
                     <Flex justifyContent="space-between">
                       <List.Header>Status: {r.status}</List.Header>
                       <List.Description>Date: {new Date(r.day).toLocaleDateString()}</List.Description>
