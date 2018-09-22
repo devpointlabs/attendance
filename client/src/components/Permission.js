@@ -11,6 +11,7 @@ export const permissions = {
     return view
   },
   isStudent: (user) => user.role === 'student',
+  isTeacherOrAdmin: (user) => user.is_admin || user.role === 'teacher',
 }
 
 class Permission extends React.Component {

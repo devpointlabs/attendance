@@ -13,6 +13,7 @@ import FetchUser from './FetchUser';
 import Settings  from './Settings';
 import ResetPW from './ResetPW';
 import Course from './Course';
+import ArchivedCourses from './ArchivedCourses';
 
 class App extends Component {
   render() {
@@ -26,6 +27,7 @@ class App extends Component {
             <ProtectedRoute exact path='/courses' component={Home} />
             <ProtectedRoute exact path='/courses/:id' component={Course} />
             <AdminRoute exact path='/settings' component={Settings} />
+            <AdminRoute exact path='/archived' component={ArchivedCourses} />
             <AuthRoute exact path='/login' component={Login} />
             <AuthRoute exact path='/register' component={Register} />
             <AuthRoute exact path='/api/auth/password/edit' component={ResetPW} />

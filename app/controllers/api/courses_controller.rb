@@ -1,7 +1,11 @@
 class Api::CoursesController < ApplicationController
   def index
     if current_user.is_admin
-      render json: Course.order(canvas_id: :desc)
+      if params[:type] === 'archived'
+        render json: Course.only_deleted.order(canvas_id: :desc)
+      else
+        render json: Course.order(canvas_id: :desc)
+      end
     else
       render json: Course.with_enrollment(current_user.id)
     end
@@ -17,6 +21,20 @@ class Api::CoursesController < ApplicationController
     else
       render json: 'restricted', status: 422
     end
+  end
+
+  def update
+    # Restore from deleted_at
+    course = Course.with_deleted.find(params[:id])
+    course.update(deleted_at: nil)
+    course.enrollments.with_deleted.each do|e| 
+      e.update(deleted_at: nil) 
+      e.records.with_deleted.each { |r| r.update(deleted_at: nil) }
+    end
+  end
+
+  def destroy
+    Course.find(params[:id]).destroy
   end
 
   def init
