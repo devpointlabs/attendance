@@ -34,6 +34,7 @@ class Course < ApplicationRecord
       users_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{id}/users?per_page=100"
       users = HTTParty.get(users_url, headers: auth, query: { include: ['avatar_url', 'enrollments'] })
       users.each do |u|
+        canvas_enrollment_id = user['enrollments'].find { |e| e['course_id'] == course.canvas_id }['id'] rescue nil
         user = User.find_or_create_by(email: u['login_id'])
         if user.new_record?
           counts[:users] += 1
@@ -44,7 +45,7 @@ class Course < ApplicationRecord
         user.save!
         enrollment = u['enrollments'].find { |e| e['course_id'] == id }
         role = enrollment['role'].downcase.gsub('enrollment', '')
-        Enrollment.find_or_create_by(role: role, user_id: user.id, course_id: course.id) do |en|
+        Enrollment.find_or_create_by(role: role, user_id: user.id, course_id: course.id, canvas_enrollment_id: canvas_enrollment_id) do |en|
           counts[:enrollments] += 1 if en.new_record?
         end
       end
