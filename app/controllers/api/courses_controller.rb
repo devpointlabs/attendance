@@ -9,8 +9,11 @@ class Api::CoursesController < ApplicationController
 
   def show 
     users = Course.with_enrollments(params[:id])
-    if current_user.is_admin || users.find { |u| u.user_id === current_user.id }
-      render json: users.select { |u| u.role == 'student' }
+    user = users.find { |u| u.user_id === current_user.id }
+    if current_user.is_admin || user
+      usrObj = current_user.is_admin ? current_user : user
+      enrollments = users.select { |u| u.role == 'student' }
+      render json: { users: enrollments, user: usrObj }
     else
       render json: 'restricted', status: 422
     end

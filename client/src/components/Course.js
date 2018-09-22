@@ -5,19 +5,20 @@ import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
 import Marks from './Marks'
+import Permission from './Permission'
 
 const Arrow = styled(Icon)`
   cursor: pointer;
 `
 
 class Course extends React.Component {
-  state = { users: [], user: {}, restricted: false, date: new Date(), records: [] }
+  state = { users: [], currentUser: {}, restricted: false, date: new Date(), records: [] }
 
   componentDidMount() {
     const { id } = this.props.match.params
     axios.get(`/api/courses/${id}`)
       .then( res => { 
-        this.setState({ users: res.data }, () => {
+        this.setState({ users: res.data.users, currentUser: res.data.user }, () => {
           this.getAttendanceByDate()
         }) 
       })
@@ -90,11 +91,9 @@ class Course extends React.Component {
   }
 
   render() {
-    const { users, user, restricted, records } = this.state
+    const { users, restricted, currentUser } = this.state
     if (restricted) {
       return <Redirect to="/" />
-    } else if (user.id) {
-      return <span>{user.id}</span>
     } else {
       return (
         <Container>
@@ -109,9 +108,11 @@ class Course extends React.Component {
                       {user.name}
                     </List.Header>
                   </List.Content>
-                  <List.Content floated="right">
-                    <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
-                  </List.Content>
+                    <List.Content floated="right">
+                      <Permission role="isStaff" user={currentUser}>
+                        <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
+                      </Permission>
+                    </List.Content>
                 </List.Item>
               )
             }
