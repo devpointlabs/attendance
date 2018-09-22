@@ -13,6 +13,7 @@ gem 'devise_token_auth'
 gem 'httparty'
 gem 'paranoia'
 gem 'aws-sdk'
+gem 'delayed_job_active_record'
 
 group :development, :test do
   gem 'pry'
