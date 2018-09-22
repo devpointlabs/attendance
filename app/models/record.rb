@@ -1,4 +1,5 @@
 class Record < ApplicationRecord
+  acts_as_paranoid
   belongs_to :enrollment
 
   def self.by_course(course_id, date)

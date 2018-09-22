@@ -11,6 +11,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'omniauth'
 gem 'devise_token_auth'
 gem 'httparty'
+gem 'paranoia'
 
 group :development, :test do
   gem 'pry'
