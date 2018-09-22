@@ -17,9 +17,9 @@ class Student extends React.Component {
     const { user } = this.state
     return (
       <Container>
-          <Flex>
+          <Flex justifyContent="center">
             <Image avatar src={user.image} size="medium"/>
-            <Card fluid>
+            <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
               </Card.Content>
