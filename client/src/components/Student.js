@@ -1,9 +1,12 @@
 import React from 'react'
 import axios from 'axios'
-import { Divider, Container, Card, List, Image, Dropdown } from 'semantic-ui-react'
+import { Button, Divider, Container, Card, List, Image, Dropdown } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
+import Permission from './Permission'
+import { setFlash } from '../reducers/flash'
 
 const colors = { 
   present: '#c3e6cb',
@@ -61,13 +64,14 @@ class Student extends React.Component {
         <Legend />
         <Pie 
           data={data} 
+          dataKey='value'
           cx={150} 
           cy={150} 
           outerRadius={80} 
           fill="#8884d8" 
           label
         >
-          { data.map((entry, index) => <Cell fill={colors[entry.name.toLowerCase()]} /> )}
+          { data.map((entry, index) => <Cell key={index} fill={colors[entry.name.toLowerCase()]} /> )}
         </Pie>
         <Tooltip />
       </PieChart>
@@ -81,12 +85,30 @@ class Student extends React.Component {
     return records.filter( r => r.status === currentFilter )
   }
 
+  genReport = () => {
+    const { courseId, dispatch } = this.props
+    const { user } = this.state
+    axios.post(`/api/reports/courses/${courseId}/users/${user.id}`)
+      .then( () => dispatch(setFlash('Report has been generated', 'green')) )
+  }
+
   render() {
+    const { currentUser } = this.props
     const { user, filter } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
     return (
       <Container>
+        <Permission 
+          permission="isStaff" 
+          user={currentUser.is_admin ? currentUser : this.props.user}
+        >
+            <Flex justifyContent="flex-end">
+              <Button color="green" onClick={this.genReport}>
+                Generate Report
+              </Button>
+            </Flex>
+          </Permission>
           <Flex justifyContent="space-around" flexWrap="wrap">
             <Image src={user.image} size="medium"/>
             <Card>
@@ -171,4 +193,8 @@ class Student extends React.Component {
   }
 }
 
-export default Student
+const mapStateToProps = (state) => {
+  return { currentUser: state.user }
+}
+
+export default connect(mapStateToProps)(Student)

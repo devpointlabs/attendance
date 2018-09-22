@@ -33,6 +33,7 @@ class Api::RecordsController < ApplicationController
     user = enrollment.user
     records = enrollment.records.order(day: :desc)
     render json: { 
+      id: user.id,
       name: user.name, 
       image: user.image, 
       records: records

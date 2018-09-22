@@ -12,6 +12,7 @@ gem 'omniauth'
 gem 'devise_token_auth'
 gem 'httparty'
 gem 'paranoia'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'pry'
