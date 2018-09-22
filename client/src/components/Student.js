@@ -32,7 +32,7 @@ class Student extends React.Component {
   }
 
   dropdownOptions = () => {
-    return ['All', 'Present', 'Absent', 'Tardy', 'Exused'].map( text => {
+    return ['All', 'Present', 'Absent', 'Tardy', 'Excused'].map( text => {
       return { key: text, text, value: text.toLowerCase() }
     })
   }
