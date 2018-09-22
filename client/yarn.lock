@@ -2096,11 +2096,11 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-devise-axios@^1.0.23:
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/devise-axios/-/devise-axios-1.0.23.tgz#90c8d188444d4facb9a720b176a1ffb01a741c7b"
+devise-axios@1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/devise-axios/-/devise-axios-1.0.12.tgz#e845818805212524aaaf5377710526d2ee2c17f2"
   dependencies:
-    "@babel/runtime" "^7.0.0"
+    regenerator-runtime "^0.12.1"
 
 diff@^3.2.0:
   version "3.5.0"
@@ -5938,7 +5938,7 @@ regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
 
-regenerator-runtime@^0.12.0:
+regenerator-runtime@^0.12.0, regenerator-runtime@^0.12.1:
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
 
