@@ -9,7 +9,7 @@ class NavBar extends Component {
     const { user, dispatch, history } = this.props;
 
     if (user.id) {
-      const auth = ['settings']
+      const auth = ['settings', 'students']
       const authLinks = auth.map( a => 
         <Link to={`/${a}`} key={a}>
             <Menu.Item name={a} />

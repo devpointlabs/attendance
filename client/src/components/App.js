@@ -14,6 +14,7 @@ import Settings  from './Settings';
 import ResetPW from './ResetPW';
 import Course from './Course';
 import ArchivedCourses from './ArchivedCourses';
+import Students from './Students';
 
 class App extends Component {
   render() {
@@ -28,6 +29,7 @@ class App extends Component {
             <ProtectedRoute exact path='/courses/:id' component={Course} />
             <AdminRoute exact path='/settings' component={Settings} />
             <AdminRoute exact path='/archived' component={ArchivedCourses} />
+            <AdminRoute exact path='/students' component={Students} />
             <AuthRoute exact path='/login' component={Login} />
             <AuthRoute exact path='/register' component={Register} />
             <AuthRoute exact path='/api/auth/password/edit' component={ResetPW} />

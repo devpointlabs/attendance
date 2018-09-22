@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :records, only: :create
     post '/records/:course_id/by_date', to: 'records#date'
     get '/records/:course_id/users/:id', to: 'records#individual'
+    resources :enrollments
   end
 
   #Do not place any routes below this one
