@@ -63,7 +63,7 @@ class Course extends React.Component {
   }
 
   today = () => {
-    this.setState({ date: new Date() })
+    this.setState({ date: new Date() }, () => this.getAttendanceByDate() )
   }
 
   datePicker = () => {
@@ -82,13 +82,21 @@ class Course extends React.Component {
 
   markUser = (id, status) => {
     const { date } = this.state
+    const r = this.state.records
     axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
       .then( res => { 
-        const records = this.state.records.map( r => {
-          if (r.id === id) 
-            return { ...r, status: res.data.status }
-          return r
-        })
+        const recs = this.state.records
+        const existing = recs.find( r => r.id === id )
+        let records
+          if (existing) {
+            records = recs.map( r => {
+            if (r.id === id) 
+              return { ...r, status: res.data.status }
+            return r
+          })
+        } else {
+          records = [...this.state.records, { id, status: res.data.status }]
+        }
 
         this.setState({ records })
       })
