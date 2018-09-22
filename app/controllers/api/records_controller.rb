@@ -13,10 +13,20 @@ class Api::RecordsController < ApplicationController
   end
 
   def individual
-    #TODO 
-    #Find Course
-    #Find Enrollment By Id
-    #Find Records
-    #create object for Present / Absent / Tardy / Excused
+    enrollment = Course.find(params[:course_id]).enrollments.find(params[:id])
+    user = enrollment.user
+    records = enrollment.records
+    present = records.where(status: 'present').length rescue 0 
+    absent = records.where(status: 'absent').length rescue 0
+    tardy = records.where(status: 'tardy').length rescue 0
+    excused = records.where(status: 'excused').length rescue 0
+    render json: { 
+      name: user.name, 
+      image: user.image, 
+      present: present, 
+      absent: absent, 
+      excused: excused, 
+      tardy: tardy
+    }
   end
 end
