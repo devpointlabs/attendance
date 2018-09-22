@@ -47,11 +47,11 @@ class Student extends React.Component {
     ]
 
     return (
-      <PieChart width={400} height={400}>
+      <PieChart width={200} height={200}>
         <Pie 
           data={data} 
-          cx={200} 
-          cy={200} 
+          cx={100} 
+          cy={100} 
           outerRadius={80} 
           fill="#8884d8" 
           label
@@ -75,8 +75,6 @@ class Student extends React.Component {
             <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
-              </Card.Content>
-              <Card.Content extra>
                 <List divided>
                   <List.Item>
                     <List.Header>
