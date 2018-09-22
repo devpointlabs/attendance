@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import axios from 'axios'
 import { Header, Button, Container, Divider, List, Image, Icon } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
@@ -6,13 +6,25 @@ import styled from 'styled-components'
 import { Flex } from './CommonStyles'
 import Marks from './Marks'
 import Permission from './Permission'
+import Student from './Student'
 
 const Arrow = styled(Icon)`
   cursor: pointer;
 `
 
+const Pointer = styled.div`
+  cursor: pointer;
+`
+
 class Course extends React.Component {
-  state = { users: [], currentUser: {}, restricted: false, date: new Date(), records: [] }
+  state = { 
+    users: [], 
+    currentUser: {}, 
+    restricted: false, 
+    date: new Date(), 
+    records: [], 
+    individualView: false
+  }
 
   componentDidMount() {
     const { id } = this.props.match.params
@@ -20,14 +32,13 @@ class Course extends React.Component {
       .then( res => { 
         const { user, users } = res.data
         const visibleUsers = user.role === 'student' ? [users.find( u => u.id === user.id)] : users
-        this.setState({ users: visibleUsers , currentUser: user }, () => {
+        this.setState({ users: visibleUsers , currentUser: user, individualView: user.role === 'student' ? user.id : false }, () => {
           this.getAttendanceByDate()
         }) 
       })
       .catch( err => {
         if (err.response.data === 'restricted')
-          this.setState({ restricted: true })
-      })
+          this.setState({ restricted: true }) })
   }
 
   getAttendanceByDate = () => {
@@ -92,8 +103,13 @@ class Course extends React.Component {
       return ''
   }
 
+  setIndividualView = (id) => {
+    this.setState({ individualView: id })
+  }
+
   render() {
-    const { users, restricted, currentUser } = this.state
+    const { users, restricted, currentUser, individualView } = this.state
+    const { id } = this.props.match.params
     if (restricted) {
       return <Redirect to="/" />
     } else {
@@ -101,24 +117,35 @@ class Course extends React.Component {
         <Container>
           <Divider hidden />
           { this.datePicker() }
-          <List celled verticalAlign="middle">
-            { users.map( user => 
-                <List.Item key={user.id}>
-                  <Image avatar src={user.image} alt="user avatar" />
-                  <List.Content>
-                    <List.Header>
-                      {user.name}
-                    </List.Header>
-                  </List.Content>
-                    <List.Content floated="right">
-                      <Permission role="isStaff" user={currentUser}>
-                        <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
-                      </Permission>
+          { individualView ?
+            <Fragment>
+              <Student courseId={id} user={individualView} />
+              <Permission role="isStaff" user={currentUser}>
+                <Button onClick={() => this.setIndividualView(null) }>Show All</Button>
+              </Permission>
+            </Fragment>
+            :
+            <List celled verticalAlign="middle">
+              { users.map( user => 
+                  <List.Item key={user.id}>
+                    <Image avatar src={user.image} alt="user avatar" />
+                    <List.Content onClick={() => this.setIndividualView(user.id) }>
+                      <List.Header>
+                        <Pointer>
+                          {user.name}
+                        </Pointer>
+                      </List.Header>
                     </List.Content>
-                </List.Item>
-              )
-            }
-          </List>
+                      <List.Content floated="right">
+                        <Permission role="isStaff" user={currentUser}>
+                          <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
+                        </Permission>
+                      </List.Content>
+                  </List.Item>
+                )
+              }
+            </List>
+          }
         </Container>
       )
     }
