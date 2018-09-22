@@ -4,6 +4,26 @@ import { Container, Card, List, Image } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
 
+const getColor = (status) => {
+  switch(status) {
+    case 'present':
+      return '#d4edda'
+    case 'absent':
+      return '#f8d7da'
+    case 'tardy':
+      return '#fff3cd'
+    case 'excused':
+      return '#d1ecf1'
+    default:
+      return '#fff'
+  }
+}
+
+const Item = styled(List.Item)`
+  background-color: ${ props => getColor(props.status) };
+  padding: 5px 5px !important;
+`
+
 class Student extends React.Component {
   state = { user: {}, Image }
 
@@ -93,10 +113,12 @@ class Student extends React.Component {
           <List divided>
             { records.map( r => {
                 return (
-                  <List.Item key={r}>
-                    <List.Header>Status: {r.status}</List.Header>
-                    <List.Description>Date: {new Date(r.day).toLocaleDateString()}</List.Description>
-                  </List.Item>
+                  <Item key={r} status={r.status}>
+                    <Flex justifyContent="space-between">
+                      <List.Header>Status: {r.status}</List.Header>
+                      <List.Description>Date: {new Date(r.day).toLocaleDateString()}</List.Description>
+                    </Flex>
+                  </Item>
                 )
               })
             }
