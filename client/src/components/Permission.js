@@ -18,8 +18,8 @@ class Permission extends React.Component {
   state = { canView: false }
 
   componentDidMount() {
-    const { role, user } = this.props
-    const func = permissions[role]
+    const { permission, user } = this.props
+    const func = permissions[permission]
     const canView = func(user)
     this.setState({ canView })
   }

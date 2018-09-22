@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import axios from 'axios'
 import { Header, Button, Container, Divider, List, Image, Icon } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
@@ -82,7 +82,6 @@ class Course extends React.Component {
 
   markUser = (id, status) => {
     const { date } = this.state
-    const r = this.state.records
     axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
       .then( res => { 
         const recs = this.state.records
@@ -127,7 +126,7 @@ class Course extends React.Component {
           { !individualView && this.datePicker() }
           { individualView ?
             <Flex>
-              <Permission role="isStaff" user={currentUser}>
+              <Permission permission="isStaff" user={currentUser}>
                 <Divider hidden/>
                 <Button onClick={() => this.setIndividualView(null) }>
                   <Icon name="chevron left" />
@@ -148,7 +147,7 @@ class Course extends React.Component {
                       </List.Header>
                     </List.Content>
                       <List.Content floated="right">
-                        <Permission role="isStaff" user={currentUser}>
+                        <Permission permission="isStaff" user={currentUser}>
                           <Marks status={this.checkStatus(user.id)} id={user.id} markUser={this.markUser} />
                         </Permission>
                       </List.Content>

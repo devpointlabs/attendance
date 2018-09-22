@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Container, Card, List, Image } from 'semantic-ui-react'
+import { Divider, Container, Card, List, Image } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
@@ -47,11 +47,12 @@ class Student extends React.Component {
     ]
 
     return (
-      <PieChart width={200} height={200}>
+      <PieChart width={300} height={300}>
+        <Legend />
         <Pie 
           data={data} 
-          cx={100} 
-          cy={100} 
+          cx={150} 
+          cy={150} 
           outerRadius={80} 
           fill="#8884d8" 
           label
@@ -67,7 +68,6 @@ class Student extends React.Component {
     const { user } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
-    const hasData = ( present + absent + tardy + excused ) > 0
     return (
       <Container>
           <Flex justifyContent="space-around" flexWrap="wrap">
@@ -75,7 +75,8 @@ class Student extends React.Component {
             <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
-                <List divided>
+                <Divider />
+                <List divided relaxed>
                   <List.Item>
                     <List.Header>
                       <Flex justifyContent='space-between'>

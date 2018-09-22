@@ -33,7 +33,7 @@ class Home extends React.Component {
       <Container>
         <Divider hidden />
         { type === 'archived' ? null :
-            <Permission role="isAdmin" user={user}>
+            <Permission permission="isAdmin" user={user}>
               <Flex justifyContent="flex-end">
                 <Link to="/archived">Archived Courses</Link>
               </Flex>
@@ -57,7 +57,7 @@ class Home extends React.Component {
                       </Card.Meta>
                     </Link>
                   </Card.Content>
-                  <Permission role="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
+                  <Permission permission="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
                     <Card.Content extra>
                       <Flex justifyContent="flex-end">
                         <Button 
