@@ -34,7 +34,6 @@ class Course < ApplicationRecord
       users_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{id}/users?per_page=100"
       users = HTTParty.get(users_url, headers: auth, query: { include: ['avatar_url', 'enrollments'] })
       users.each do |u|
-        binding.pry if u['login_id'] == 'dave@devpointlabs.com'
         user = User.find_or_create_by(email: u['login_id'])
         if user.new_record?
           counts[:users] += 1
