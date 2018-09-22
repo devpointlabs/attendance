@@ -1,10 +1,18 @@
 import React, { Fragment } from 'react'
-import { Input, Button, List, Image } from 'semantic-ui-react'
+import { Divider, Input, Button, List, Image } from 'semantic-ui-react'
 import axios from 'axios'
 import Student from './Student'
+import styled from 'styled-components'
+
+const Course = styled.h3`
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 5px;
+`
 
 class Students extends React.Component {
-  state = { name: '', students: [], filtered: [], student: { courses: [] } }
+  state = { name: '', students: [], filtered: [], student: {} }
 
   componentDidMount() {
     axios.get('/api/enrollments')
@@ -50,42 +58,66 @@ class Students extends React.Component {
     this.setState({ filtered: students, name: '' })
   }
 
+  setUser = (student) => {
+    this.setState({ student })
+  }
+
+  clearStudent = () => {
+    this.setState({ student: {} })
+  }
+
   render() {
     const { name, filtered, student } = this.state
     return (
       <Fragment>
-        <Input
-          label={
-            name ?
-              (<Button basic onClick={this.clearSearch}>
-                Clear Search
-                </Button> 
-               )
-             :
-            'Search'
-          }
-          value={name}
-          onChange={this.search}
-        />
         { student.id ? 
             <Fragment>
-              <Student courseId={student.course_id} user={student} />
+              <Divider hidden />
+              <Button onClick={this.clearStudent}>Back To Search</Button>
+              <Divider hidden />
+              <Student courseId={student.course_id} user={student.id} />
             </Fragment>
             :
-            <List divided relaxed>
-              { filtered.map( user => 
-                  <List.Item key={user.id}>
-                    <Image avatar src={user.image} alt="user avatar" />
-                    <List.Header>
-                      {user.name}
-                    </List.Header>
-                    <List.Description position="right">
-                      { user.courses.map( c => <p key={c.id}>{c.name}</p> ) }
-                    </List.Description>
-                  </List.Item>
-                )
-              }
-            </List>
+            <Fragment>
+              <Input
+                label={
+                  name ?
+                  (<Button basic onClick={this.clearSearch}>
+                    Clear Search
+                  </Button> 
+                  )
+                    :
+                    'Search'
+                }
+                value={name}
+                onChange={this.search}
+              />
+              <List divided relaxed>
+                { filtered.map( user => 
+                    <List.Item key={user.id}>
+                      <Image avatar src={user.image} alt="user avatar" />
+                      <List.Header>
+                        {user.name}
+                      </List.Header>
+                      <List.Description position="right">
+                        { user.courses.map( c => 
+                            <Course 
+                              key={c.id}
+                              onClick={ () => {
+                                const currentUser = {...user, course_id: c.id } 
+                                this.setUser(currentUser)
+                              }}
+                            >
+                              {c.name}
+                            </Course> 
+                          ) 
+                        }
+                      </List.Description>
+                    </List.Item>
+                  )
+                }
+              </List>
+            </Fragment>
         }
       </Fragment>
     )
