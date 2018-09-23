@@ -56,7 +56,7 @@ class Report < ApplicationRecord
     begin
       obj = s3.bucket(s3_bucket).object("reports/courses/#{id}/#{course_name}-#{DateTime.now.to_s}.csv")
       obj.put body: file, content_type: 'text/csv' 
-      Report.create(report_type: 'course', url: obj.key, name: name)
+      Report.create(report_type: 'course', url: obj.key, name: course_name)
     rescue => e
       Rails.logger.error("ERROR: #{e}")
     end
