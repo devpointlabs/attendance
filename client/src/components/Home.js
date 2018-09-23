@@ -7,9 +7,10 @@ import { roles } from '../utils/strHelper'
 import Permission from './Permission'
 import { Flex } from './CommonStyles'
 import { setFlash } from '../reducers/flash'
+import Confirm from './Confirm'
 
 class Home extends React.Component {
-  state =  { courses: [] }
+  state =  { courses: [], showConfirm: false, archiving: null }
 
   componentDidMount() {
     axios.get(`/api/courses?type=${this.props.type}`)
@@ -28,15 +29,25 @@ class Home extends React.Component {
   genReport = (id) => {
     axios.post(`/api/reports/courses/${id}`)
       .then( res => this.props.dispatch(setFlash('Report is generating', 'green')) )
-   }
+  }
 
+  checkStatus = (status) => {
+     if (status) 
+       this.archive(this.state.archiving)
+     this.setState({ archiving: null, showConfirm: false })
+  }
 
+  showConfirm = (id) => {
+    this.setState({ archiving: id, showConfirm: true })
+  }
 
   render() {
-    const { courses } = this.state
+    const { courses, showConfirm } = this.state
     const { user, type } = this.props
+    const msg = type === 'archived' ? 'Restore' : 'Archive'
     return (
       <Container>
+        { showConfirm && <Confirm message={`Really ${msg}?`} dismiss={this.checkStatus} /> }
         <Divider hidden />
         { type === 'archived' ? null :
             <Permission permission="isAdmin" user={user}>
@@ -74,7 +85,7 @@ class Home extends React.Component {
                         </Button>
                         <Button 
                           color={ type === 'archived' ? "green" : "red" } 
-                          onClick={() => this.archive(id)}
+                          onClick={() => this.showConfirm(id)}
                         >
                           { type === 'archived' ? 'Restore' : 'Archive' }
                         </Button>
