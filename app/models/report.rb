@@ -14,15 +14,10 @@ class Report < ApplicationRecord
       csv << ['date', 'status']
       records.each { |record| csv << [record.day.strftime('%m/%d/%Y'), record.status] }
     end
-    s3 = Aws::S3::Resource.new(region: ENV['AWS_REGION'])
-    s3_bucket = ENV['S3_BUCKET']
-    begin
-      obj = s3.bucket(s3_bucket).object("reports/courses/#{course.id}/#{name}-#{DateTime.now.to_s}.csv")
-      obj.put body: file, content_type: 'text/csv' 
-      Report.create(report_type: 'student', url: obj.key, name: name)
-    rescue => e
-      Rails.logger.error("ERROR: #{e}")
-    end
+    key = "reports/courses/#{course.id}/#{name}"
+    report_type = 'student'
+    file_name = name
+    generate_report(key, report_type, file_name, file)
   end
 
   def self.course_report(id)
@@ -53,16 +48,11 @@ class Report < ApplicationRecord
         user[:records].each { |r| csv << [name, email, r[:date], r[:status]] }
       end
     end
-    s3 = Aws::S3::Resource.new(region: ENV['AWS_REGION'])
-    s3_bucket = ENV['S3_BUCKET']
-    begin
-      obj = s3.bucket(s3_bucket).object("reports/courses/#{id}/#{course_name}-#{DateTime.now.to_s}.csv")
-      obj.put body: file, content_type: 'text/csv' 
-      Report.create(report_type: 'course', url: obj.key, name: course_name)
-    rescue => e
-      Rails.logger.error("ERROR: #{e}")
-    end
 
+    key = "reports/courses/#{id}/#{course_name}"
+    report_type = 'course'
+    file_name = course_name
+    generate_report(key, report_type, file_name, file)
   end
 
   def self.parse_data(id)
@@ -95,6 +85,18 @@ class Report < ApplicationRecord
       headers: head,
       data: tail
     }
+  end
+
+  def self.generate_report(key, report_type, name, file)
+    s3 = Aws::S3::Resource.new(region: ENV['AWS_REGION'])
+    s3_bucket = ENV['S3_BUCKET']
+    begin
+      obj = s3.bucket(s3_bucket).object("#{key}-#{DateTime.now.to_s}.csv")
+      obj.put body: file, content_type: 'text/csv' 
+      Report.create(report_type: report_type, url: obj.key, name: name)
+    rescue => e
+      Rails.logger.error("ERROR: #{e}")
+    end
   end
 end
 
