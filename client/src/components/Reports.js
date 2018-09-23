@@ -30,7 +30,7 @@ class Reports extends React.Component {
   }
 
   render() {
-    const { reports, archiving, showConfirm } = this.state
+    const { reports, showConfirm } = this.state
     return (
       <Container>
         { showConfirm && <Confirm message='Really Archive Report?' dismiss={this.checkStatus} /> }

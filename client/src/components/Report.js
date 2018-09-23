@@ -40,7 +40,7 @@ class Report extends React.Component {
               <Table.Row>
                 <Table.Cell>{meta.name}</Table.Cell>
                 <Table.Cell>{meta.type}</Table.Cell>
-                { hasExtra && keys.map( key => <Table.Cell>{additional[key]}</Table.Cell> ) }
+                { hasExtra && keys.map( key => <Table.Cell key={key}>{additional[key]}</Table.Cell> ) }
               </Table.Row>
               <Table.Row>
                 { headers.map( header => <Table.HeaderCell key={header} colSpan={headerSpan}>{header}</Table.HeaderCell> ) }
