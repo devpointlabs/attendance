@@ -1,4 +1,5 @@
 require 'csv'
+require 'open-uri'
 
 class Report < ApplicationRecord
   def self.user_in_course(course_id, user_id)
@@ -16,10 +17,11 @@ class Report < ApplicationRecord
     begin
       obj = s3.bucket(s3_bucket).object("reports/courses/#{course.id}/#{name}-#{DateTime.now.to_s}.csv")
       obj.put body: file
-      Report.create(report_type: 'student', url: obj.key)
+      Report.create(report_type: 'student', url: obj.key, name: name)
     rescue => e
       Rails.logger.error("ERROR: #{e}")
     end
   end
+
 end
 
