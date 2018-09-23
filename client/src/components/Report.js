@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Table, Header, Button } from 'semantic-ui-react'
+import { Container, Table, Header } from 'semantic-ui-react'
 import axios from 'axios'
 
 class Report extends React.Component {
