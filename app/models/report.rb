@@ -23,5 +23,36 @@ class Report < ApplicationRecord
     end
   end
 
+  def self.parse_data(id)
+    report = Report.find(id)
+    s3 = Aws::S3::Presigner.new(region: ENV['AWS_REGION'])
+    bucket = ENV['S3_BUCKET']
+    url = s3.presigned_url(
+      :get_object,
+      bucket: bucket,
+      key: report.url,
+      expires_in: 2000
+    )
+
+    data = open(url).read
+    lines = data.split("\n")
+    head = lines[0].split(',')
+    tail = lines.from(1).map { |l| l.split(',') }
+    additional = {}
+
+    if report.report_type === 'student'
+      present = tail.select { |t| t.include? 'present' }.length
+      absent = tail.select { |t| t.include? 'absent' }.length
+      tardy = tail.select { |t| t.include? 'tardy' }.length
+      excused = tail.select { |t| t.include? 'excused' }.length
+      additional = { present: present, absent: absent, tardy: tardy, excused: excused }
+    end
+
+    {
+      meta: { name: report.name, type: report.report_type, additional: additional },
+      headers: head,
+      data: tail
+    }
+  end
 end
 
