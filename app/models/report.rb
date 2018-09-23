@@ -2,6 +2,8 @@ require 'csv'
 require 'open-uri'
 
 class Report < ApplicationRecord
+  acts_as_paranoid
+
   def self.user_in_course(course_id, user_id)
     enrollment = Enrollment.find_by(course_id: course_id, user_id: user_id)
     course = enrollment.course

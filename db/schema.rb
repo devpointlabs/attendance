@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_22_232854) do
+ActiveRecord::Schema.define(version: 2018_09_23_153415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,8 @@ ActiveRecord::Schema.define(version: 2018_09_22_232854) do
     t.string "report_type"
     t.string "url"
     t.string "name"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_reports_on_deleted_at"
   end
 
   create_table "users", force: :cascade do |t|

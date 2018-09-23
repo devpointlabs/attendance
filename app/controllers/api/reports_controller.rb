@@ -7,6 +7,10 @@ class Api::ReportsController < ApplicationController
     render json: Report.parse_data(params[:id])
   end
 
+  def destroy
+    Report.find(params[:id]).destroy
+  end
+
   def user_in_course
     Report.delay.user_in_course(params[:course_id], params[:id])
   end
