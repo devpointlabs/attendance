@@ -23,6 +23,16 @@ class Report < ApplicationRecord
     end
   end
 
+  def self.course_report(id)
+    #TODO
+    #Get coures
+    #Get Enrollents
+    #GET counts
+    #Create CSV
+    #Push to S3
+    #create Report recoord
+  end
+
   def self.parse_data(id)
     report = Report.find(id)
     s3 = Aws::S3::Presigner.new(region: ENV['AWS_REGION'])

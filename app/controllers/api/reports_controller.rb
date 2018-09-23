@@ -10,4 +10,8 @@ class Api::ReportsController < ApplicationController
   def user_in_course
     Report.delay.user_in_course(params[:course_id], params[:id])
   end
+  
+  def course_report
+    Report.delay.course_report(params[:course_id])
+  end
 end

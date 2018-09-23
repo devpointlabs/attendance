@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get '/records/:course_id/users/:id', to: 'records#individual'
     resources :enrollments
     post '/reports/courses/:course_id/users/:id', to: 'reports#user_in_course'
+    post '/reports/courses/:course_id', to: 'reports#course_report'
     resources :reports, only: [:index, :show, :destroy]
   end
 

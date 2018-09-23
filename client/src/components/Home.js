@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { roles } from '../utils/strHelper'
 import Permission from './Permission'
 import { Flex } from './CommonStyles'
+import { setFlash } from '../reducers/flash'
 
 class Home extends React.Component {
   state =  { courses: [] }
@@ -23,6 +24,11 @@ class Home extends React.Component {
         this.setState({ courses: this.state.courses.filter( c => c.id !== id) })
       })
   }
+
+  genReport = (id) => {
+    axios.post(`/reports/courses/${id}`)
+      .then( res => this.props.dispatch(setFlash('Report is generating', 'green')) )
+   }
 
 
 
@@ -59,7 +65,13 @@ class Home extends React.Component {
                   </Card.Content>
                   <Permission permission="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
                     <Card.Content extra>
-                      <Flex justifyContent="flex-end">
+                      <Flex justifyContent="space-between">
+                        <Button 
+                          color="blue"
+                          onClick={() => this.genReport(id)}
+                        >
+                          Run Report
+                        </Button>
                         <Button 
                           color={ type === 'archived' ? "green" : "red" } 
                           onClick={() => this.archive(id)}
