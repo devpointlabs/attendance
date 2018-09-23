@@ -26,7 +26,7 @@ class Home extends React.Component {
   }
 
   genReport = (id) => {
-    axios.post(`/reports/courses/${id}`)
+    axios.post(`/api/reports/courses/${id}`)
       .then( res => this.props.dispatch(setFlash('Report is generating', 'green')) )
    }
 

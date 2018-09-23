@@ -16,7 +16,7 @@ class Report < ApplicationRecord
     s3_bucket = ENV['S3_BUCKET']
     begin
       obj = s3.bucket(s3_bucket).object("reports/courses/#{course.id}/#{name}-#{DateTime.now.to_s}.csv")
-      obj.put body: file
+      obj.put body: file, content_type: 'text/csv' 
       Report.create(report_type: 'student', url: obj.key, name: name)
     rescue => e
       Rails.logger.error("ERROR: #{e}")
@@ -24,13 +24,43 @@ class Report < ApplicationRecord
   end
 
   def self.course_report(id)
-    #TODO
-    #Get coures
-    #Get Enrollents
-    #GET counts
-    #Create CSV
-    #Push to S3
-    #create Report recoord
+    course = Course.select('courses.id AS course_id, courses.name AS course_name, 
+                            u.name AS user_name, email, r.status, r.day')
+          .joins('INNER JOIN enrollments e ON e.course_id = courses.id
+                  INNER JOIN users u ON u.id = e.user_id
+                  INNER JOIN records r ON r.enrollment_id = e.id')
+          .where("courses.id = #{id}")
+          .order('day DESC, u.name, status')
+    users = course.map { |c| { name: c['user_name'], email: c['email'] } }.uniq
+    data = []
+    users.each do |u|
+      name = u[:name]
+      email = u[:email]
+      records = course.select { |r| r['email'] == email }
+                      .map { |r| { date: r[:day].strftime('%m/%d/%Y'), status: r[:status] } }
+
+      data << { name: name, email: email, records: records }
+    end
+
+    course_name = "#{course.first['course_name'].downcase.gsub(' ', '_')}"
+    file = CSV.generate do |csv|
+      csv << ['name', 'email', 'date', 'status']
+      data.each do |user|
+        name = user[:name]
+        email = user[:email]
+        user[:records].each { |r| csv << [name, email, r[:date], r[:status]] }
+      end
+    end
+    s3 = Aws::S3::Resource.new(region: ENV['AWS_REGION'])
+    s3_bucket = ENV['S3_BUCKET']
+    begin
+      obj = s3.bucket(s3_bucket).object("reports/courses/#{id}/#{course_name}-#{DateTime.now.to_s}.csv")
+      obj.put body: file, content_type: 'text/csv' 
+      Report.create(report_type: 'course', url: obj.key, name: name)
+    rescue => e
+      Rails.logger.error("ERROR: #{e}")
+    end
+
   end
 
   def self.parse_data(id)
