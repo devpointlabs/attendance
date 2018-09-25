@@ -1,6 +1,17 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Divider, Container, Card, List, Image, Dropdown } from 'semantic-ui-react'
+import { 
+  Button, 
+  Divider, 
+  Container, 
+  Card, 
+  List, 
+  Image, 
+  Dropdown, 
+  Dimmer,
+  Loader,
+  Header,
+} from 'semantic-ui-react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { Flex } from './CommonStyles'
@@ -22,14 +33,14 @@ const Item = styled(List.Item)`
 `
 
 class Student extends React.Component {
-  state = { user: {}, Image, filter: 'all', grades: [] }
+  state = { user: {}, Image, filter: 'all', grades: [], gradesLoaded: false }
 
   componentDidMount() {
     const { courseId, user } = this.props
     axios.get(`/api/records/${courseId}/users/${user}`) 
     .then( res => this.setState({ user: res.data }, () => {
       axios.get(`/api/courses/${courseId}/grades/${user}`)
-        .then( res => this.setState({ grades: res.data }) )
+        .then( res => this.setState({ grades: res.data, gradesLoaded: true }) )
       })
     ) 
   }
@@ -96,9 +107,25 @@ class Student extends React.Component {
       .then( () => dispatch(setFlash('Report has been generated', 'green')) )
   }
 
+  grades = () => {
+    const { grades } = this.state
+    const totalAssignments = grades.length
+    const total = grades.reduce( (total, grade) => total + grade.points, 0)
+    const score = grades.reduce( (total, grade) => total + grade.score, 0)
+    return (
+      <div>
+        <Divider />
+        <Header as="h3">Assignments: {totalAssignments}</Header>
+        <Header as="h3">Points: {score}/{total}</Header>
+        <Header as="h3">Complete: {(score/total * 100).toFixed(2)}%</Header>
+        <Header as="h3">Missing: { grades.filter( a => a.score === 0 ).length }</Header> 
+      </div>
+    )
+  }
+
   render() {
     const { currentUser } = this.props
-    const { user, filter } = this.state
+    const { user, filter, gradesLoaded } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
     return (
@@ -114,7 +141,18 @@ class Student extends React.Component {
             </Flex>
           </Permission>
           <Flex justifyContent="space-around" flexWrap="wrap">
-            <Image src={user.image} size="medium"/>
+            <Flex direction="column" justifyContent="center" alignItems="center">
+              <Image src={user.image} avatar alt="user avatar" size="small"/>
+              { gradesLoaded ? 
+                  this.grades() 
+                  : 
+                  <div>
+                    <Dimmer active>
+                      <Loader />
+                    </Dimmer>
+                  </div>
+              }
+            </Flex>
             <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
