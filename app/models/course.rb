@@ -46,9 +46,10 @@ class Course < ApplicationRecord
         headers: auth,
         query: {
           student_ids: [enrollment.canvas_enrollment_id],
+          grouped: true,
           assignment_ids: assignments.map { |a| a[:id] }
         }
-      ).map { |s| { assignment_id: s['assignment_id'], score: s['score'] } }
+      ).first['submissions'].map { |s| { assignment_id: s['assignment_id'], score: s['score'] } }
 
       data = assignments.map do |a|
         sub = submissions.find { |s| s[:assignment_id] == a[:id] } || { score: 0 }
