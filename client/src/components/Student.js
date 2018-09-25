@@ -8,7 +8,6 @@ import {
   List, 
   Image, 
   Dropdown, 
-  Dimmer,
   Loader,
   Header,
 } from 'semantic-ui-react'
@@ -114,7 +113,6 @@ class Student extends React.Component {
     const score = grades.reduce( (total, grade) => total + grade.score, 0)
     return (
       <div>
-        <Divider />
         <Header as="h3">Points: {score}/{total}</Header>
         <Header as="h3">Complete: {(score/total * 100).toFixed(2)}%</Header>
         <Header as="h3">Missing: { grades.filter( a => a.score === 0 ).length }/{totalAssignments}</Header> 
@@ -142,14 +140,11 @@ class Student extends React.Component {
           <Flex justifyContent="space-around" flexWrap="wrap">
             <Flex direction="column" justifyContent="center" alignItems="center">
               <Image src={user.image} avatar alt="user avatar" size="small"/>
+              <Divider />
               { gradesLoaded ? 
                   this.grades() 
                   : 
-                  <div>
-                    <Dimmer active>
-                      <Loader />
-                    </Dimmer>
-                  </div>
+                  <Loader active inline/>
               }
             </Flex>
             <Card>
