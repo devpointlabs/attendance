@@ -20,6 +20,47 @@ class Course < ApplicationRecord
     .order('courses.canvas_id DESC')
   end
 
+  def self.grades(course_id, enrollment)
+    #get grade weights
+    #get total graded assignments
+    #get submissions for user for graded assignments
+      auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
+      HTTParty::Basement.default_options.update(verify: false)
+      #GET /api/v1/courses/:course_id/assignment_groups
+      url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/assignment_groups"
+      groups = HTTParty.get(url, headers: auth )
+      group_id = groups.find { |g| g['name'] == 'Assignments' }['id']
+      group = HTTParty.get(
+        "#{url}/#{group_id}", 
+        headers: auth, 
+        query: {
+          include: ['assignments', 'submissions'],
+        }
+      )
+      assignments = group['assignments'].select { |a| a['published'] == true }
+                                        .map { |a| { id: a['id'], points: a['points_possible'] } }
+                   
+      sub_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/students/submissions"
+      submissions = HTTParty.get(
+        sub_url,
+        headers: auth,
+        query: {
+          student_ids: [enrollment.canvas_enrollment_id],
+          assignment_ids: assignments.map { |a| a[:id] }
+        }
+      ).map { |s| { assignment_id: s['assignment_id'], score: s['score'] } }
+
+      data = assignments.map do |a|
+        sub = submissions.find { |s| s[:assignment_id] == a[:id] } || { score: 0 }
+        { 
+          id: a[:id],
+          points: a[:points],
+          score: sub[:score]
+        }
+      end
+      data
+  end
+
   def self.init_course(id)
     counts = { users: 0, enrollments: 0, errors: [], status: 200, name: '' }
     begin
@@ -34,7 +75,7 @@ class Course < ApplicationRecord
       users_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{id}/users?per_page=100"
       users = HTTParty.get(users_url, headers: auth, query: { include: ['avatar_url', 'enrollments'] })
       users.each do |u|
-        canvas_enrollment_id = user['enrollments'].find { |e| e['course_id'] == course.canvas_id }['id'] rescue nil
+        canvas_enrollment_id = u['id']
         user = User.find_or_create_by(email: u['login_id'])
         if user.new_record?
           counts[:users] += 1

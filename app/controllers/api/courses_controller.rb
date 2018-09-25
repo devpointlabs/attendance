@@ -42,4 +42,9 @@ class Api::CoursesController < ApplicationController
     data = Course.init_course(id)
     render json: data
   end
+
+  def grades
+    enrollment = Enrollment.find(params[:user_id])
+    render json: Course.grades(params[:course_id], enrollment)
+  end
 end

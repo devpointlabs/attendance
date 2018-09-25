@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :courses, only: [:index, :show, :destroy, :update]
     get 'init_courses/:id', to: 'courses#init'
+    get 'courses/:course_id/grades/:user_id', to: 'courses#grades'
     post 'register', to: 'passwords#reset'
     post '/reset_password', to: 'passwords#reset_password'
     post '/records/:course_id/all_present', to: 'records#all_present'

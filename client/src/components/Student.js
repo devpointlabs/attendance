@@ -22,12 +22,16 @@ const Item = styled(List.Item)`
 `
 
 class Student extends React.Component {
-  state = { user: {}, Image, filter: 'all' }
+  state = { user: {}, Image, filter: 'all', grades: [] }
 
   componentDidMount() {
     const { courseId, user } = this.props
     axios.get(`/api/records/${courseId}/users/${user}`) 
-      .then( res => this.setState({ user: res.data }) )
+    .then( res => this.setState({ user: res.data }, () => {
+      axios.get(`/api/courses/${courseId}/grades/${user}`)
+        .then( res => this.setState({ grades: res.data }) )
+      })
+    ) 
   }
 
   setFilter = (filter = 'all') => {
