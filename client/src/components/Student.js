@@ -115,10 +115,9 @@ class Student extends React.Component {
     return (
       <div>
         <Divider />
-        <Header as="h3">Assignments: {totalAssignments}</Header>
         <Header as="h3">Points: {score}/{total}</Header>
         <Header as="h3">Complete: {(score/total * 100).toFixed(2)}%</Header>
-        <Header as="h3">Missing: { grades.filter( a => a.score === 0 ).length }</Header> 
+        <Header as="h3">Missing: { grades.filter( a => a.score === 0 ).length }/{totalAssignments}</Header> 
       </div>
     )
   }
