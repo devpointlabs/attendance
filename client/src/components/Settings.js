@@ -65,11 +65,12 @@ class Settings extends Component {
 
   render() {
     const { courseId, loading, courses } = this.state
+    const itemsPerRow  = courses.length < 4 ? courses.length : 4
     return (
       <Container>
         <Divider hidden />
         <Flex justifyContent="space-around">
-          <Card.Group itemsPerRow={4} stackable>
+          <Card.Group itemsPerRow={itemsPerRow} stackable>
           { courses.map( card =>  {
             const { 
               id, 
