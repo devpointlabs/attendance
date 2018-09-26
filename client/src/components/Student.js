@@ -49,10 +49,14 @@ class Student extends React.Component {
       axios.get(`/api/courses/${courseId}/grades/${user}`)
         .then( res => { 
           const { weights, grades } = res.data
+          const total = grades.reduce( (total, grade) => total + grade.points, 0)
+          const score = grades.reduce( (total, grade) => total + grade.score, 0)
+          const assignmentPercent = parseFloat((score/total)*(weights.assignments/100).toFixed(2))
           this.setState({ 
             grades, 
             gradeWeight: weights, 
-            gradesLoaded: true 
+            gradesLoaded: true,
+            grade: { assignments: assignmentPercent },
           }) 
         })
       })
