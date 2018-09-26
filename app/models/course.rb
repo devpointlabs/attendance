@@ -1,6 +1,12 @@
 class Course < ApplicationRecord
   DEFAULT_ATTENDANCE = 75
   DEFAULT_ASSIGNMENT = 25
+  DEFAULT_STANDARD = [
+    { value: 90, key: 'S', text: 'Satisfactory' },
+    { value: 80, key: 'I', text: 'Incomplete' },
+    { value: 0, key: 'U', text: 'Unsatisfactory' }
+  ]
+
   acts_as_paranoid
   after_create :create_weights
 
@@ -10,7 +16,11 @@ class Course < ApplicationRecord
   has_one :grade_weight, dependent: :destroy
 
   def create_weights
-    self.create_grade_weight(attendance: DEFAULT_ATTENDANCE, assignments: DEFAULT_ASSIGNMENT)
+    self.create_grade_weight(
+      attendance: DEFAULT_ATTENDANCE, 
+      assignments: DEFAULT_ASSIGNMENT,
+      standard: DEFAULT_STANDARD
+    )
     self.save
   end
 
