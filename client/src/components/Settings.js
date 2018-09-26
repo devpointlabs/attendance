@@ -110,7 +110,7 @@ class Settings extends Component {
           })
           }
         </Card.Group>
-        <Flex direction="column" alignItems="center">
+        <Flex paddingLeft={20} direction="column" alignItems="center">
           <Header as='h1' textAlign='center'>Add A Course</Header>
           <Form onSubmit={this.getCourseInfo}>
             <Form.Input 
