@@ -45,6 +45,7 @@ class Api::CoursesController < ApplicationController
 
   def grades
     enrollment = Enrollment.find(params[:user_id])
-    render json: Course.grades(params[:course_id], enrollment)
+    course = enrollment.course
+    render json: { weights: course.grade_weight, grades: Course.grades(params[:course_id], enrollment) }
   end
 end

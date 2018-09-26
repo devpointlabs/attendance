@@ -32,14 +32,29 @@ const Item = styled(List.Item)`
 `
 
 class Student extends React.Component {
-  state = { user: {}, Image, filter: 'all', grades: [], gradesLoaded: false }
+  state = { 
+    user: {}, 
+    Image, 
+    filter: 'all', 
+    grades: [], 
+    gradeWeight: {}, 
+    gradesLoaded: false,
+    grade: {},
+  }
 
   componentDidMount() {
     const { courseId, user } = this.props
     axios.get(`/api/records/${courseId}/users/${user}`) 
     .then( res => this.setState({ user: res.data }, () => {
       axios.get(`/api/courses/${courseId}/grades/${user}`)
-        .then( res => this.setState({ grades: res.data, gradesLoaded: true }) )
+        .then( res => { 
+          const { weights, grades } = res.data
+          this.setState({ 
+            grades, 
+            gradeWeight: weights, 
+            gradesLoaded: true 
+          }) 
+        })
       })
     ) 
   }
