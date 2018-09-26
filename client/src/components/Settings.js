@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Card, Header, Container, Form, Divider, Dimmer, Loader } from 'semantic-ui-react';
+import { Card, Header, Container, Form, Divider, Dimmer, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { Flex } from './CommonStyles';
@@ -10,7 +10,7 @@ class Settings extends Component {
 
   componentDidMount() {
     axios.get('/api/courses')
-      .then( res => this.setState({ courses: res.data }) )
+    .then( res => this.setState({ courses: res.data }) )
   }
 
   getCourseInfo = () => {
@@ -19,17 +19,17 @@ class Settings extends Component {
     if (courseId) {
       this.setState({ loading: true }, () => {
         axios.get(`/api/init_courses/${courseId}`)
-          .then( res => { 
-            const { users, enrollments, name } = res.data
-            const msg = `Users: ${users} | Enrollments: ${enrollments} added to ${name}`
-            dispatch(setFlash(msg, 'green'))
-            this.setState({ courseId: '' })
-            this.setState({ loading: false })
-          })
-          .catch( err => {
-            dispatch(setFlash('Something went wrong', 'red'))
-            this.setState({ loading: false })
-          })
+        .then( res => { 
+          const { users, enrollments, name } = res.data
+          const msg = `Users: ${users} | Enrollments: ${enrollments} added to ${name}`
+          dispatch(setFlash(msg, 'green'))
+          this.setState({ courseId: '' })
+          this.setState({ loading: false })
+        })
+        .catch( err => {
+          dispatch(setFlash('Something went wrong', 'red'))
+          this.setState({ loading: false })
+        })
       })
     } else {
       dispatch('Add a course id', 'red')
@@ -69,56 +69,65 @@ class Settings extends Component {
       <Container>
         <Divider hidden />
         <Flex justifyContent="space-around">
-          { courses.map( card => 
-              <Card.Group key={card.id} itemsPerRow={1}>
-                <Card>
-                  <Card.Content>
-                    <Card.Header>{card.name}</Card.Header>
-                    <Card.Meta>{card.id}</Card.Meta>
-                    <Card.Description>
-                      <Form onSubmit={(e) => this.changeWeights(e, card.id)}>
-                        <Flex direction="column">
-                          <Form.Input
-                            label="Assignments %"
-                            name="assignments"
-                            defaultValue={`${card.grade_weight.assignments}`}
-                            type="number"
-                            min="0"
-                          />
-                          <Form.Input
-                            label="Attendance %"
-                            name="attendance"
-                            defaultValue={`${card.grade_weight.attendance}`}
-                            type="number"
-                            min="0"
-                          />
-                          <Form.Button>Save</Form.Button>
-                        </Flex>
-                      </Form>
-                    </Card.Description>
-                  </Card.Content>
-                </Card>
-              </Card.Group>
+          <Card.Group itemsPerRow={2} stackable>
+          { courses.map( card =>  {
+            const { 
+              id, 
+              canvas_id,
+              name, 
+              grade_weight = {}
+            } = card
+            const { assignments = 0, attendance = 0 } = grade_weight
+            return (
+              <Card key={id}>
+                <Card.Content>
+                  <Card.Header>{name}</Card.Header>
+                  <Card.Meta>{canvas_id}</Card.Meta>
+                  <Card.Description>
+                    <Form onSubmit={(e) => this.changeWeights(e, id)}>
+                      <Flex direction="column">
+                        <Form.Input
+                          label="Assignments %"
+                          name="assignments"
+                          defaultValue={`${assignments}`}
+                          type="number"
+                          min="0"
+                        />
+                        <Form.Input
+                          label="Attendance %"
+                          name="attendance"
+                          defaultValue={`${attendance}`}
+                          type="number"
+                          min="0"
+                        />
+                        <Form.Button>Save</Form.Button>
+                      </Flex>
+                    </Form>
+                  </Card.Description>
+                </Card.Content>
+              </Card>
             )
+          })
           }
-          <Flex direction="column" alignItems="center">
-            <Header as='h1' textAlign='center'>Add A Course</Header>
-            <Form onSubmit={this.getCourseInfo}>
-              <Form.Input 
-                value={courseId} 
-                name="courseId"
-                label="Course Id"
-                type="number"
-                min="1"
-                step="1"
-                onChange={this.handleChange}
-                required
-              />
-              { loading ? this.loader() : <Form.Button>Import Course Data</Form.Button> }
-            </Form>
-          </Flex>
+        </Card.Group>
+        <Flex direction="column" alignItems="center">
+          <Header as='h1' textAlign='center'>Add A Course</Header>
+          <Form onSubmit={this.getCourseInfo}>
+            <Form.Input 
+              value={courseId} 
+              name="courseId"
+              label="Course Id"
+              type="number"
+              min="1"
+              step="1"
+              onChange={this.handleChange}
+              required
+            />
+            { loading ? this.loader() : <Form.Button>Import Course Data</Form.Button> }
+          </Form>
         </Flex>
-      </Container>
+      </Flex>
+    </Container>
     );
   }
 }
