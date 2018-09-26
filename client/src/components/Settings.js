@@ -54,10 +54,10 @@ class Settings extends Component {
     const { dispatch } = this.props
     const assignValue = parseFloat(assignments.value)
     const attendanceValue = parseFloat(attendance.value)
+    const weights = { attendance: attendanceValue, assignments: assignValue }
     if (assignValue + attendanceValue === 100.0) {
-      //TODO
-      // api to update wieghts
-      // update values in state
+      axios.post(`/api/courses/${courseId}/grade_weights`, { weights })
+        .then( () => dispatch(setFlash('Weights Adjusted', 'green')) )
     } else {
       dispatch(setFlash("Weights must add up to 100", "red"))
     }
@@ -69,7 +69,7 @@ class Settings extends Component {
       <Container>
         <Divider hidden />
         <Flex justifyContent="space-around">
-          <Card.Group itemsPerRow={2} stackable>
+          <Card.Group itemsPerRow={4} stackable>
           { courses.map( card =>  {
             const { 
               id, 
