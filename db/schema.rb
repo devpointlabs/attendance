@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_23_153415) do
+ActiveRecord::Schema.define(version: 2018_09_26_014508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,15 @@ ActiveRecord::Schema.define(version: 2018_09_23_153415) do
     t.index ["course_id"], name: "index_enrollments_on_course_id"
     t.index ["deleted_at"], name: "index_enrollments_on_deleted_at"
     t.index ["user_id"], name: "index_enrollments_on_user_id"
+  end
+
+  create_table "grade_weights", force: :cascade do |t|
+    t.bigint "course_id"
+    t.float "assignments"
+    t.float "attendance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_grade_weights_on_course_id"
   end
 
   create_table "records", force: :cascade do |t|
@@ -109,5 +118,6 @@ ActiveRecord::Schema.define(version: 2018_09_23_153415) do
 
   add_foreign_key "enrollments", "courses"
   add_foreign_key "enrollments", "users"
+  add_foreign_key "grade_weights", "courses"
   add_foreign_key "records", "enrollments"
 end

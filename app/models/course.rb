@@ -3,7 +3,8 @@ class Course < ApplicationRecord
 
   has_many :enrollments, dependent: :destroy
   has_many :users, through: :enrollments
-  has_many :records
+  has_many :records, dependent: :destroy
+  has_one :grade_weight, dependent: :destroy
 
   def self.with_enrollments(course_id)
     select('e.id, u.name, u.image, e.role, e.user_id')

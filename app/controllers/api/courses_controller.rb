@@ -4,7 +4,7 @@ class Api::CoursesController < ApplicationController
       if params[:type] === 'archived'
         render json: Course.only_deleted.order(canvas_id: :desc)
       else
-        render json: Course.order(canvas_id: :desc)
+        render json: Course.order(canvas_id: :desc), include: :grade_weight
       end
     else
       render json: Course.with_enrollment(current_user.id)
