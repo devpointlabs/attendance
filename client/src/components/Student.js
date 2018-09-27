@@ -149,9 +149,22 @@ class Student extends React.Component {
     )
   }
 
+  asPercent = (value) => {
+    return `${(value * 100).toFixed(2)}%`
+  }
+
+  findGrade = () => {
+    const { grade, gradeWeight: { standard = [] }} = this.state
+    const total = (grade.attendance + grade.assignments) * 100
+    const values = standard.map( v => v.value )
+    const value = values.sort().reverse().find( v => v < total )
+    const gradeObj = standard.find( s => s.value === value )
+    return `${gradeObj.key}: ${gradeObj.text}`
+  }
+
   render() {
     const { currentUser } = this.props
-    const { user, filter, gradesLoaded } = this.state
+    const { user, filter, gradesLoaded, grade } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const records = user.records || []
     return (
@@ -230,6 +243,53 @@ class Student extends React.Component {
                       </Flex>
                     </List.Header>
                   </List.Item>
+                  { gradesLoaded ? 
+                    <List.Item>
+                      <List.Header>
+                        <Flex justifyContent='space-between'>
+                          <span>
+                            Assignments:
+                          </span>
+                          <span>
+                            { this.asPercent(grade.assignments) }
+                          </span>
+                        </Flex>
+                      </List.Header>
+                      <List.Header>
+                        <Flex justifyContent='space-between'>
+                          <span>
+                            Attendance:
+                          </span>
+                          <span>
+                            { this.asPercent(grade.attendance) }
+                          </span>
+                        </Flex>
+                      </List.Header>
+                      <List.Header>
+                        <Flex justifyContent='space-between'>
+                          <span>
+                            Total:
+                          </span>
+                          <span>
+                            { this.asPercent(grade.assignments + grade.attendance) }
+                          </span>
+                        </Flex>
+                      </List.Header>
+                      <Divider />
+                      <List.Header>
+                        <Flex justifyContent='space-between'>
+                          <Header>
+                            Grade:
+                          </Header>
+                          <Header>
+                            { this.findGrade() }
+                          </Header>
+                        </Flex>
+                      </List.Header>
+                    </List.Item>
+                    : 
+                    <Loader active inline/>
+                  }
                 </List>
               </Card.Content>
             </Card>
