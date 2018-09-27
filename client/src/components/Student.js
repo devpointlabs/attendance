@@ -176,6 +176,7 @@ class Student extends React.Component {
                   <Loader active inline/>
               }
             </Flex>
+            { this.chart({ absent, tardy, present, excused }) }
             <Card>
               <Card.Content>
                 <Card.Header>{user.name}</Card.Header>
@@ -232,7 +233,6 @@ class Student extends React.Component {
                 </List>
               </Card.Content>
             </Card>
-            { this.chart({ absent, tardy, present, excused }) }
           </Flex>
           <Dropdown 
             options={this.dropdownOptions()} 
