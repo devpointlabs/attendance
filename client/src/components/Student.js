@@ -60,7 +60,7 @@ class Student extends React.Component {
           const totalRecords = present + tardy + excused + absent
           const presentPercent = (present + excused)/totalRecords
           const tardyPercent = (tardy * .8)/totalRecords
-          const attendancePercent = (presentPercent + tardyPercent)*(weights.attendance/100)
+          const attendancePercent = totalRecords === 0 ? (weights.attendance / 100) : (presentPercent + tardyPercent)*(weights.attendance/100)
 
           this.setState({ 
             grades, 
