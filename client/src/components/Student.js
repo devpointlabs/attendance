@@ -51,12 +51,22 @@ class Student extends React.Component {
           const { weights, grades } = res.data
           const total = grades.reduce( (total, grade) => total + grade.points, 0)
           const score = grades.reduce( (total, grade) => total + grade.score, 0)
+          //Weighted Assignments as percent
           const assignmentPercent = parseFloat((score/total)*(weights.assignments/100).toFixed(2))
+
+          //Weighted Attendance as percent
+          const attendance = this.calcTotals()
+          const { present = 0, tardy = 0, excused = 0, absent = 0 } = attendance
+          const totalRecords = present + tardy + excused + absent
+          const presentPercent = (present + excused)/totalRecords
+          const tardyPercent = (tardy * .8)/totalRecords
+          const attendancePercent = (presentPercent + tardyPercent)*(weights.attendance/100)
+
           this.setState({ 
             grades, 
             gradeWeight: weights, 
             gradesLoaded: true,
-            grade: { assignments: assignmentPercent },
+            grade: { assignments: assignmentPercent, attendance: attendancePercent },
           }) 
         })
       })
