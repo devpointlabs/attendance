@@ -71,7 +71,7 @@ class Settings extends Component {
       <Container>
         <Divider hidden />
         <Flex justifyContent="space-around">
-          <Card.Group itemsPerRow={itemsPerRow} stackable>
+          <Card.Group itemsPerRow={itemsPerRow === 0 ? 1 : itemsPerRow} stackable>
           { courses.map( card =>  <CourseSetting key={card.id} course={card} /> ) }
         </Card.Group>
         <Flex paddingLeft={20} direction="column" alignItems="center">
