@@ -12,7 +12,12 @@ const Scroller = styled.div`
 `
 
 class CourseSetting extends Component {
-  state = { showSchema: false }
+  state = { showSchema: false, standard: [] }
+
+  componentDidMount() {
+    const { standard } = this.props.course.grade_weight
+    this.setState({ standard })
+  }
 
   toggleShowSchema = () => {
     this.setState( state => ({ showSchema: !state.showSchema }) )
@@ -32,9 +37,18 @@ class CourseSetting extends Component {
     }
   }
 
+  revert = () => {
+    const { standard } = this.props.course.grade_weight
+    this.setState({ standard })
+  }
+
+  removeStandard = (index) => {
+    const { standard } = this.state
+    this.setState({ standard: standard.filter( (s,i) => i !== index ) })
+  }
+
   showSchema = () => {
-    const { grade_weight } = this.props.course
-    const { standard = [] } = grade_weight
+    const { standard } = this.state
     return (
       <Fragment>
         <Scroller>
@@ -53,7 +67,7 @@ class CourseSetting extends Component {
                        <span>
                         {standard.value}
                       </span>
-                        <Pointer>
+                        <Pointer onClick={() => this.removeStandard(i)}>
                           <Icon name="times" color="red" />
                         </Pointer>
                       </Flex>
@@ -65,7 +79,11 @@ class CourseSetting extends Component {
           }
         </Scroller>
         <Divider hidden />
-        <Form.Button type="button" onClick={this.toggleShowSchema}>Weights</Form.Button>
+        <Flex justifyContent="space-around">
+          <Form.Button type="button" onClick={this.toggleShowSchema}>Weight</Form.Button>
+          <Form.Button type="button" onClick={this.revert} icon="sync" />
+          <Form.Button type="button" primary onClick={this.updateStandard}>Save</Form.Button>
+        </Flex>
       </Fragment>
     )
   }
