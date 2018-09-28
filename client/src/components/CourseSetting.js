@@ -1,15 +1,20 @@
-import React, { Component } from 'react';
-import { Card, Form } from 'semantic-ui-react';
+import React, { Fragment, Component } from 'react';
+import { Divider, Card, Form, List } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { Flex } from './CommonStyles';
 import { setFlash } from '../reducers/flash'
+import styled from 'styled-components'
+
+const Scroller = styled.div`
+  overflow-y: scroll;
+`
 
 class CourseSetting extends Component {
+  state = { showSchema: false }
 
-  handleChange = ({ target }) => {
-    const { name, value } = target
-    this.setState({ [name]: value })
+  toggleShowSchema = () => {
+    this.setState( state => ({ showSchema: !state.showSchema }) )
   }
 
   changeWeights = (e, courseId) => {
@@ -26,8 +31,39 @@ class CourseSetting extends Component {
     }
   }
 
+  showSchema = () => {
+    const { grade_weight } = this.props.course
+    const { standard = [] } = grade_weight
+    return (
+      <Fragment>
+        <Scroller>
+          { standard.map( (standard, i) => 
+              <List key={i}>
+                <List.Item>
+                  <List.Content>
+                    <List.Header>
+                      {standard.text}
+                    </List.Header>
+                    <List.Description>
+                      {standard.key}
+                      {' - '}
+                      {standard.value}
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              </List>
+            )
+          }
+        </Scroller>
+        <Divider />
+        <Form.Button type="button" onClick={this.toggleShowSchema}>Weights</Form.Button>
+      </Fragment>
+    )
+  }
+
   render() {
     const { course = {} } = this.props
+    const { showSchema } = this.state
     const { 
       id, 
       canvas_id,
@@ -41,25 +77,32 @@ class CourseSetting extends Component {
           <Card.Header>{name}</Card.Header>
           <Card.Meta>{canvas_id}</Card.Meta>
           <Card.Description>
-            <Form onSubmit={(e) => this.changeWeights(e, id)}>
-              <Flex direction="column">
-                <Form.Input
-                  label="Assignments %"
-                  name="assignments"
-                  defaultValue={`${assignments}`}
-                  type="number"
-                  min="0"
-                />
-                <Form.Input
-                  label="Attendance %"
-                  name="attendance"
-                  defaultValue={`${attendance}`}
-                  type="number"
-                  min="0"
-                />
-                <Form.Button>Save</Form.Button>
-              </Flex>
-            </Form>
+            { showSchema ?
+                this.showSchema() 
+                :
+                <Form onSubmit={(e) => this.changeWeights(e, id)}>
+                  <Flex direction="column">
+                    <Form.Input
+                      label="Assignments %"
+                      name="assignments"
+                      defaultValue={`${assignments}`}
+                      type="number"
+                      min="0"
+                    />
+                    <Form.Input
+                      label="Attendance %"
+                      name="attendance"
+                      defaultValue={`${attendance}`}
+                      type="number"
+                      min="0"
+                    />
+                    <Flex>
+                      <Form.Button onClick={this.toggleShowSchema} type="button">Schema</Form.Button>
+                      <Form.Button>Save</Form.Button>
+                    </Flex>
+                  </Flex>
+                </Form>
+            }
           </Card.Description>
         </Card.Content>
       </Card>
