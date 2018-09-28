@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios';
 import { Flex } from './CommonStyles';
 import { setFlash } from '../reducers/flash'
+import CourseSetting from './CourseSetting'
 
 class Settings extends Component {
   state = { courseId: '', loading: false, courses: [] }
@@ -71,45 +72,7 @@ class Settings extends Component {
         <Divider hidden />
         <Flex justifyContent="space-around">
           <Card.Group itemsPerRow={itemsPerRow} stackable>
-          { courses.map( card =>  {
-            const { 
-              id, 
-              canvas_id,
-              name, 
-              grade_weight = {}
-            } = card
-            const { assignments = 0, attendance = 0 } = grade_weight
-            return (
-              <Card key={id}>
-                <Card.Content>
-                  <Card.Header>{name}</Card.Header>
-                  <Card.Meta>{canvas_id}</Card.Meta>
-                  <Card.Description>
-                    <Form onSubmit={(e) => this.changeWeights(e, id)}>
-                      <Flex direction="column">
-                        <Form.Input
-                          label="Assignments %"
-                          name="assignments"
-                          defaultValue={`${assignments}`}
-                          type="number"
-                          min="0"
-                        />
-                        <Form.Input
-                          label="Attendance %"
-                          name="attendance"
-                          defaultValue={`${attendance}`}
-                          type="number"
-                          min="0"
-                        />
-                        <Form.Button>Save</Form.Button>
-                      </Flex>
-                    </Form>
-                  </Card.Description>
-                </Card.Content>
-              </Card>
-            )
-          })
-          }
+          { courses.map( card =>  <CourseSetting key={card.id} course={card} /> ) }
         </Card.Group>
         <Flex paddingLeft={20} direction="column" alignItems="center">
           <Header as='h1' textAlign='center'>Add A Course</Header>

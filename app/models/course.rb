@@ -42,8 +42,9 @@ class Course < ApplicationRecord
   def self.grades(course_id, enrollment)
     auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
     HTTParty::Basement.default_options.update(verify: false)
-    #GET /api/v1/courses/:course_id/assignment_groups
     url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/assignment_groups"
+
+    # Find assignment group id for 'Assignments'
     groups = HTTParty.get(url, headers: auth )
     group_id = groups.find { |g| g['name'] == 'Assignments' }['id']
     group = HTTParty.get(
@@ -53,10 +54,13 @@ class Course < ApplicationRecord
         include: ['assignments', 'submissions'],
       }
     )
+
     assignments = group['assignments'].select { |a| a['published'] == true }
       .map { |a| { id: a['id'], points: a['points_possible'] } }
 
     sub_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/students/submissions"
+
+    # Submissions for graded assignments for specific user
     submissions = HTTParty.get(
       sub_url,
       headers: auth,
