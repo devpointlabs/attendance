@@ -1,10 +1,11 @@
 import React, { Fragment, Component } from 'react';
-import { Divider, Card, Form, List } from 'semantic-ui-react';
+import { Divider, Card, Form, List, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import { Flex } from './CommonStyles';
 import { setFlash } from '../reducers/flash'
 import styled from 'styled-components'
+import { Pointer } from './CommonStyles'
 
 const Scroller = styled.div`
   overflow-y: scroll;
@@ -38,16 +39,24 @@ class CourseSetting extends Component {
       <Fragment>
         <Scroller>
           { standard.map( (standard, i) => 
-              <List key={i}>
+              <List divided celled key={i}>
                 <List.Item>
                   <List.Content>
                     <List.Header>
                       {standard.text}
                     </List.Header>
                     <List.Description>
-                      {standard.key}
-                      {' - '}
-                      {standard.value}
+                      <Flex justifyContent="space-between">
+                        <span>
+                         {standard.key}
+                       </span>
+                       <span>
+                        {standard.value}
+                      </span>
+                        <Pointer>
+                          <Icon name="times" color="red" />
+                        </Pointer>
+                      </Flex>
                     </List.Description>
                   </List.Content>
                 </List.Item>
@@ -55,7 +64,7 @@ class CourseSetting extends Component {
             )
           }
         </Scroller>
-        <Divider />
+        <Divider hidden />
         <Form.Button type="button" onClick={this.toggleShowSchema}>Weights</Form.Button>
       </Fragment>
     )
@@ -98,7 +107,7 @@ class CourseSetting extends Component {
                     />
                     <Flex>
                       <Form.Button onClick={this.toggleShowSchema} type="button">Schema</Form.Button>
-                      <Form.Button>Save</Form.Button>
+                      <Form.Button primary>Save</Form.Button>
                     </Flex>
                   </Flex>
                 </Form>

@@ -13,3 +13,7 @@ export const Flex = styled.div`
   padding-left: ${ props => props.paddingLeft || 0}px;
 `
 
+export const Pointer = styled.div`
+  cursor: pointer;
+`
+
