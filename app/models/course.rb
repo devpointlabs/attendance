@@ -26,59 +26,56 @@ class Course < ApplicationRecord
 
   def self.with_enrollments(course_id)
     select('e.id, u.name, u.image, e.role, e.user_id')
-    .joins('INNER JOIN enrollments e ON e.course_id = courses.id')
-    .joins('INNER JOIN users u on u.id = e.user_id')
-    .where("courses.id = #{course_id}")
-    .order('u.name')
+      .joins('INNER JOIN enrollments e ON e.course_id = courses.id')
+      .joins('INNER JOIN users u on u.id = e.user_id')
+      .where("courses.id = #{course_id}")
+      .order('u.name')
   end
 
   def self.with_enrollment(user_id)
     select('DISTINCT(courses.id), courses.name, e.role, courses.canvas_id')
-    .joins("INNER JOIN enrollments e ON e.course_id = courses.id 
+      .joins("INNER JOIN enrollments e ON e.course_id = courses.id 
             AND e.user_id = #{user_id}")
-    .order('courses.canvas_id DESC')
+      .order('courses.canvas_id DESC')
   end
 
   def self.grades(course_id, enrollment)
-    #get grade weights
-    #get total graded assignments
-    #get submissions for user for graded assignments
-      auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
-      HTTParty::Basement.default_options.update(verify: false)
-      #GET /api/v1/courses/:course_id/assignment_groups
-      url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/assignment_groups"
-      groups = HTTParty.get(url, headers: auth )
-      group_id = groups.find { |g| g['name'] == 'Assignments' }['id']
-      group = HTTParty.get(
-        "#{url}/#{group_id}", 
-        headers: auth, 
-        query: {
-          include: ['assignments', 'submissions'],
-        }
-      )
-      assignments = group['assignments'].select { |a| a['published'] == true }
-                                        .map { |a| { id: a['id'], points: a['points_possible'] } }
-                   
-      sub_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/students/submissions"
-      submissions = HTTParty.get(
-        sub_url,
-        headers: auth,
-        query: {
-          student_ids: [enrollment.canvas_enrollment_id],
-          grouped: true,
-          assignment_ids: assignments.map { |a| a[:id] }
-        }
-      ).first['submissions'].map { |s| { assignment_id: s['assignment_id'], score: s['score'] } }
+    auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
+    HTTParty::Basement.default_options.update(verify: false)
+    #GET /api/v1/courses/:course_id/assignment_groups
+    url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/assignment_groups"
+    groups = HTTParty.get(url, headers: auth )
+    group_id = groups.find { |g| g['name'] == 'Assignments' }['id']
+    group = HTTParty.get(
+      "#{url}/#{group_id}", 
+      headers: auth, 
+      query: {
+        include: ['assignments', 'submissions'],
+      }
+    )
+    assignments = group['assignments'].select { |a| a['published'] == true }
+      .map { |a| { id: a['id'], points: a['points_possible'] } }
 
-      data = assignments.map do |a|
-        sub = submissions.find { |s| s[:assignment_id] == a[:id] } || { score: 0 }
-        { 
-          id: a[:id],
-          points: a[:points],
-          score: sub[:score]
-        }
-      end
-      data
+    sub_url = "#{ENV['CANVAS_BASE_URL']}/courses/#{enrollment.course.canvas_id}/students/submissions"
+    submissions = HTTParty.get(
+      sub_url,
+      headers: auth,
+      query: {
+        student_ids: [enrollment.canvas_enrollment_id],
+        grouped: true,
+        assignment_ids: assignments.map { |a| a[:id] }
+      }
+    ).first['submissions'].map { |s| { assignment_id: s['assignment_id'], score: s['score'] } }
+
+    data = assignments.map do |a|
+      sub = submissions.find { |s| s[:assignment_id] == a[:id] } || { score: 0 }
+      { 
+        id: a[:id],
+        points: a[:points],
+        score: sub[:score]
+      }
+    end
+    data
   end
 
   def self.init_course(id)
