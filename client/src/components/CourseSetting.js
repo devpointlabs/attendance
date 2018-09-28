@@ -12,7 +12,7 @@ const Scroller = styled.div`
 `
 
 class CourseSetting extends Component {
-  state = { showSchema: false, standard: [] }
+  state = { showSchema: false, standard: [], showAdd: false }
 
   componentDidMount() {
     const { standard } = this.props.course.grade_weight
@@ -54,37 +54,92 @@ class CourseSetting extends Component {
       .then( () => dispatch(setFlash('Standards Updated', 'green')) ) 
   }
 
+  toggleAdd = () => {
+    this.setState({ showAdd: !this.state.showAdd })
+  }
+
+  addEntry = (e) => {
+    e.preventDefault()
+    const { text, key, value } = e.target.elements
+    const entry = { text: text.value, key: key.value, value: value.value }
+    this.setState({ standard: [...this.state.standard, entry], showAdd: false }, () => {
+      this.updateStandard() 
+    })
+  }
+
+  showAdd = () => {
+    return (
+      <Form onSubmit={this.addEntry}>
+        <Form.Input
+          required
+          name="text"
+          label="Text"
+        />
+        <Form.Input
+          required
+          name="key"
+          label="Key"
+          maxLength="1"
+        />
+        <Form.Input
+          required
+          name="value"
+          label="Value"
+          type="number"
+          min="0"
+        />
+        <Form.Button fluid primary>Submit</Form.Button>
+        <Divider hidden />
+      </Form>
+    )
+  }
+
+  byValue = (x,y) => {
+    if (x.value > y.value)
+      return -1
+    if (y.value > x.value)
+      return 1
+    return 0
+  }
+
   showSchema = () => {
-    const { standard } = this.state
+    const { standard, showAdd } = this.state
     return (
       <Fragment>
         <Scroller>
-          { standard.map( (standard, i) => 
-              <List divided celled key={i}>
-                <List.Item>
-                  <List.Content>
-                    <List.Header>
-                      {standard.text}
-                    </List.Header>
-                    <List.Description>
-                      <Flex justifyContent="space-between">
-                        <span>
-                         {standard.key}
-                       </span>
-                       <span>
-                        {standard.value}
-                      </span>
-                        <Pointer onClick={() => this.removeStandard(i)}>
-                          <Icon name="times" color="red" />
-                        </Pointer>
-                      </Flex>
-                    </List.Description>
-                  </List.Content>
-                </List.Item>
-              </List>
-            )
+          { showAdd ?
+            this.showAdd()
+            :
+            <Fragment>
+              { standard.sort(this.byValue).map( (standard, i) => 
+                  <List divided celled key={i}>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>
+                          {standard.text}
+                        </List.Header>
+                        <List.Description>
+                          <Flex justifyContent="space-between">
+                            <span>
+                             {standard.key}
+                           </span>
+                           <span>
+                            {standard.value}
+                          </span>
+                            <Pointer onClick={() => this.removeStandard(i)}>
+                              <Icon name="times" color="red" />
+                            </Pointer>
+                          </Flex>
+                        </List.Description>
+                      </List.Content>
+                    </List.Item>
+                  </List>
+                )
+              }
+            </Fragment>
           }
         </Scroller>
+        <Form.Button fluid onClick={this.toggleAdd}>{ showAdd ? 'Back' : 'Add'}</Form.Button>
         <Divider hidden />
         <Flex justifyContent="space-around">
           <Form.Button type="button" onClick={this.toggleShowSchema}>Weight</Form.Button>
