@@ -47,6 +47,13 @@ class CourseSetting extends Component {
     this.setState({ standard: standard.filter( (s,i) => i !== index ) })
   }
 
+  updateStandard = () => {
+    const { course, dispatch } = this.props
+    const { standard } = this.state
+    axios.put(`/api/courses/${course.id}/grade_weights/standard`, { standard })
+      .then( () => dispatch(setFlash('Standards Updated', 'green')) ) 
+  }
+
   showSchema = () => {
     const { standard } = this.state
     return (

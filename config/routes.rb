@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'api/auth'
   namespace :api do
     resources :courses, only: [:index, :show, :destroy, :update] do
-      resources :grade_weights, only: :create
+      resources :grade_weights, only: [:create, :update]
     end
     get 'init_courses/:id', to: 'courses#init'
     get 'courses/:course_id/grades/:user_id', to: 'courses#grades'
