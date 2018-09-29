@@ -61,7 +61,7 @@ class CourseSetting extends Component {
   addEntry = (e) => {
     e.preventDefault()
     const { text, key, value } = e.target.elements
-    const entry = { text: text.value, key: key.value, value: value.value }
+    const entry = { text: text.value, key: key.value, value: parseFloat(value.value) }
     this.setState({ standard: [...this.state.standard, entry], showAdd: false }, () => {
       this.updateStandard() 
     })
