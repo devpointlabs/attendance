@@ -12,7 +12,6 @@ class Course < ApplicationRecord
 
   has_many :enrollments, dependent: :destroy
   has_many :users, through: :enrollments
-  has_many :records, dependent: :destroy
   has_one :grade_weight, dependent: :destroy
 
   def create_weights
