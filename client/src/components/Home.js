@@ -78,16 +78,16 @@ class Home extends React.Component {
                     <Card.Content extra>
                       <Flex justifyContent="space-between">
                         <Button 
-                          color="blue"
-                          onClick={() => this.genReport(id)}
-                        >
-                          Run Report
-                        </Button>
-                        <Button 
                           color={ type === 'archived' ? "green" : "red" } 
                           onClick={() => this.showConfirm(id)}
                         >
                           { type === 'archived' ? 'Restore' : 'Archive' }
+                        </Button>
+                        <Button 
+                          color="blue"
+                          onClick={() => this.genReport(id)}
+                        >
+                          Run Report
                         </Button>
                       </Flex>
                     </Card.Content>
