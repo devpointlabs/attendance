@@ -16,7 +16,7 @@ class Course < ApplicationRecord
 
   def create_weights
     self.create_grade_weight(
-      attendance: DEFAULT_ATTENDANCE, 
+      attendance: DEFAULT_ATTENDANCE,
       assignments: DEFAULT_ASSIGNMENT,
       standard: DEFAULT_STANDARD
     )
@@ -33,7 +33,7 @@ class Course < ApplicationRecord
 
   def self.with_enrollment(user_id)
     select('DISTINCT(courses.id), courses.name, e.role, courses.canvas_id')
-      .joins("INNER JOIN enrollments e ON e.course_id = courses.id 
+      .joins("INNER JOIN enrollments e ON e.course_id = courses.id
             AND e.user_id = #{user_id}")
       .order('courses.canvas_id DESC')
   end
@@ -47,8 +47,8 @@ class Course < ApplicationRecord
     groups = HTTParty.get(url, headers: auth )
     group_id = groups.find { |g| g['name'] == 'Assignments' }['id']
     group = HTTParty.get(
-      "#{url}/#{group_id}", 
-      headers: auth, 
+      "#{url}/#{group_id}",
+      headers: auth,
       query: {
         include: ['assignments', 'submissions'],
       }
@@ -72,7 +72,7 @@ class Course < ApplicationRecord
 
     data = assignments.map do |a|
       sub = submissions.find { |s| s[:assignment_id] == a[:id] } || { score: 0 }
-      { 
+      {
         id: a[:id],
         points: a[:points],
         score: sub[:score]
@@ -88,6 +88,7 @@ class Course < ApplicationRecord
       url = "#{ENV['CANVAS_BASE_URL']}/courses/#{id}"
       auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
       course = Course.find_or_create_by(canvas_id: id)
+      binding.pry
       canvas_course = HTTParty.get(url, headers: auth)
       course.name = canvas_course['name']
       counts[:name] = course.name

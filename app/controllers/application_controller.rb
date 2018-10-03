@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
     begin
       request.controller_class.parent == Api
     rescue => NameError
-      Rails.logger.error(NameError.message) 
+      Rails.logger.error(NameError.message)
     end
   }
 
