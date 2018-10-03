@@ -4,6 +4,7 @@ import { Header, Button, Container, Divider, List, Image, Icon } from 'semantic-
 import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { Flex } from './CommonStyles'
+import DatePicker from 'react-date-picker'
 import Marks from './Marks'
 import Permission from './Permission'
 import Student from './Student'
@@ -17,24 +18,24 @@ const Pointer = styled.div`
 `
 
 class Course extends React.Component {
-  state = { 
-    users: [], 
-    currentUser: {}, 
-    restricted: false, 
-    date: new Date(), 
-    records: [], 
+  state = {
+    users: [],
+    currentUser: {},
+    restricted: false,
+    date: new Date(),
+    records: [],
     individualView: false
   }
 
   componentDidMount() {
     const { id } = this.props.match.params
     axios.get(`/api/courses/${id}`)
-      .then( res => { 
+      .then( res => {
         const { user, users } = res.data
         const visibleUsers = user.role === 'student' ? [users.find( u => u.id === user.id)] : users
         this.setState({ users: visibleUsers , currentUser: user, individualView: user.role === 'student' ? user.id : false }, () => {
           this.getAttendanceByDate()
-        }) 
+        })
       })
       .catch( err => {
         if (err.response.data === 'restricted')
@@ -66,6 +67,10 @@ class Course extends React.Component {
     this.setState({ date: new Date() }, () => this.getAttendanceByDate() )
   }
 
+  handleDatePickerChange = (date) => {
+    this.setState({ date: date })
+  }
+
   datePicker = () => {
     const { date } = this.state
     const dateString = date.toLocaleDateString()
@@ -75,6 +80,10 @@ class Course extends React.Component {
         <Arrow onClick={this.dateMinus} name="chevron left" />
         <Header as="h2">{dateString}</Header>
         <Arrow onClick={this.datePlus} name="chevron right" />
+        <DatePicker
+          value={date}
+          onChange={this.handleDatePickerChange}
+        />
         <Flex>
           { !today && <Button primary onClick={this.today}>Today</Button> }
           <Button onClick={this.markAll} color="green">
@@ -97,11 +106,11 @@ class Course extends React.Component {
     const recs = this.state.records
     const existing = recs.find( r => r.id === id )
     axios.post('/api/records', { id, status, date: date.toLocaleDateString() })
-      .then( res => { 
+      .then( res => {
         let records
           if (existing) {
             records = recs.map( r => {
-            if (r.id === id) 
+            if (r.id === id)
               return { ...r, status: res.data.status }
             return r
           })
@@ -148,7 +157,7 @@ class Course extends React.Component {
             </Flex>
             :
             <List celled verticalAlign="middle">
-              { users.map( user => 
+              { users.map( user =>
                   <List.Item key={user.id}>
                     <Image avatar src={user.image} alt="user avatar" />
                     <List.Content onClick={() => this.setIndividualView(user.id) }>
