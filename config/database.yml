@@ -80,6 +80,10 @@ test:
 #
 production:
   <<: *default
-  database: attendance_production
-  username: dpladmin
-  password: <%= ENV['ATTENDANCE_DATABASE_PASSWORD'] %>
+  adapter: postgredsql
+  encoding: unicode
+  database: <%= ENV['RDS_DB_NAME'] %>
+  username: <%= ENV['RDS_USERNAME'] %>
+  password: <%= ENV['RDS_PASSWORD'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  port: <%= ENV['RDS_PORT'] %>
