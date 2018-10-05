@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: attendance_production
-  username: attendance
+  username: dpladmin
   password: <%= ENV['ATTENDANCE_DATABASE_PASSWORD'] %>
