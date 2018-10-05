@@ -68,7 +68,7 @@ class Course extends React.Component {
   }
 
   handleDatePickerChange = (date) => {
-    this.setState({ date: date })
+    this.setState({ date })
   }
 
   datePicker = () => {
