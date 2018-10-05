@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import { Divider, Card, Form, List, Icon } from 'semantic-ui-react';
-import { connect } from 'react-redux'
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import { Flex } from './CommonStyles';
 import { setFlash } from '../reducers/flash'
@@ -163,7 +164,11 @@ class CourseSetting extends Component {
     return (
       <Card>
         <Card.Content>
-          <Card.Header>{name}</Card.Header>
+          <Card.Header>
+            <Link to={`/courses/${id}`}>
+              {name}
+            </Link>
+          </Card.Header>
           <Card.Meta>{canvas_id}</Card.Meta>
           <Card.Description>
             { showSchema ?
