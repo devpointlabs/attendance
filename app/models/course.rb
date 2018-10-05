@@ -88,7 +88,6 @@ class Course < ApplicationRecord
       url = "#{ENV['CANVAS_BASE_URL']}/courses/#{id}"
       auth = {"Authorization" => "Bearer #{ENV['CANVAS_API_KEY']}"}
       course = Course.find_or_create_by(canvas_id: id)
-      binding.pry
       canvas_course = HTTParty.get(url, headers: auth)
       course.name = canvas_course['name']
       counts[:name] = course.name
