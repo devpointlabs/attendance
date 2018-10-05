@@ -13,6 +13,9 @@ import {
 } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import Calendar from 'react-big-calendar'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import moment from 'moment'
 import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 import Permission from './Permission'
@@ -25,11 +28,24 @@ const colors = {
   excused: '#bee5eb',
 }
 
+const localizer = Calendar.momentLocalizer(moment)
 
 const Item = styled(List.Item)`
   background-color: ${ props => colors[props.status] };
   padding: 5px 5px !important;
 `
+
+const Status = styled.div`
+  background-color: ${ props => colors[props.title] };
+`
+
+const Record = ({ event: { title } }) => (
+  <Status title={title}>
+    <Header as="h1" textAlign="center">
+      {title}
+    </Header>
+  </Status>
+)
 
 class Student extends React.Component {
   state = { 
@@ -40,6 +56,7 @@ class Student extends React.Component {
     gradeWeight: {}, 
     gradesLoaded: false,
     grade: {},
+    attendance: {},
   }
 
   componentDidMount() {
@@ -63,6 +80,7 @@ class Student extends React.Component {
           const attendancePercent = totalRecords === 0 ? (weights.attendance / 100) : (presentPercent + tardyPercent)*(weights.attendance/100)
 
           this.setState({ 
+            attendance,
             grades, 
             gradeWeight: weights, 
             gradesLoaded: true,
@@ -160,6 +178,21 @@ class Student extends React.Component {
     const value = values.sort().reverse().find( v => v < total )
     const gradeObj = standard.find( s => s.value === value )
     return `${gradeObj.key}: ${gradeObj.text}`
+  }
+
+  getEvents = () => {
+    const { user } = this.state
+    const { records = [] } = user
+    return records.map( record => {
+      const { status, day } = record
+      const date = moment(day)
+      return {
+        title: status,
+        start: date,
+        end: date,
+        allDay: true
+      }
+    })
   }
 
   render() {
@@ -294,6 +327,14 @@ class Student extends React.Component {
               </Card.Content>
             </Card>
           </Flex>
+          <Calendar
+            localizer={localizer}
+            views={['month']}
+            events={this.getEvents()}
+            startAccessor="start"
+            endAccessor="end"
+            components={{ event: Record }}
+          />
           <Dropdown 
             options={this.dropdownOptions()} 
             value={filter}
