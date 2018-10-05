@@ -40,7 +40,10 @@ class Api::CoursesController < ApplicationController
   def init
     id = params[:id].to_i
     data = Course.init_course(id)
-    render json: data
+    course_data = data[:course]
+    grade_weight = { grade_weight: course_data.grade_weight.attributes }
+    course = course = course_data.attributes.merge(grade_weight)
+    render json: { counts: data[:counts], course: course }
   end
 
   def grades

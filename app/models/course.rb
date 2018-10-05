@@ -110,7 +110,7 @@ class Course < ApplicationRecord
           counts[:enrollments] += 1 if en.new_record?
         end
       end
-      counts
+      { counts: counts, course: course }
     rescue => e
       counts[:errors] << e
       counts[:status] = 422

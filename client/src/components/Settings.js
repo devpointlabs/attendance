@@ -21,11 +21,12 @@ class Settings extends Component {
       this.setState({ loading: true }, () => {
         axios.get(`/api/init_courses/${courseId}`)
         .then( res => { 
-          const { users, enrollments, name } = res.data
+          const { users, enrollments, name } = res.data.counts
+          const { course } = res.data
+          const { courses } = this.state
           const msg = `Users: ${users} | Enrollments: ${enrollments} added to ${name}`
           dispatch(setFlash(msg, 'green'))
-          this.setState({ courseId: '' })
-          this.setState({ loading: false })
+          this.setState({ courseId: '', loading: false, courses: [...courses, course] })
         })
         .catch( err => {
           dispatch(setFlash('Something went wrong', 'red'))
