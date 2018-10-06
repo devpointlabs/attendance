@@ -16,10 +16,11 @@ import { connect } from 'react-redux'
 import Calendar from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
-import { Flex } from './CommonStyles'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 import Permission from './Permission'
 import { setFlash } from '../reducers/flash'
+import { capitalize } from '../utils/strHelper'
+import { Flex } from './CommonStyles'
 
 const colors = { 
   present: '#c3e6cb',
@@ -50,7 +51,6 @@ const Record = ({ event: { title } }) => (
 class Student extends React.Component {
   state = { 
     user: {}, 
-    Image, 
     filter: 'all', 
     grades: [], 
     gradeWeight: {}, 
@@ -199,6 +199,7 @@ class Student extends React.Component {
     const { currentUser } = this.props
     const { user, filter, gradesLoaded, grade } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
+    const totals = { present, absent, tardy, excused }
     const records = user.records || []
     return (
       <Container>
@@ -228,54 +229,25 @@ class Student extends React.Component {
                 <Card.Header>{user.name}</Card.Header>
                 <Divider />
                 <List divided relaxed>
-                  <List.Item>
-                    <List.Header>
-                      <Flex justifyContent='space-between'>
-                        <span>
-                          Present: 
-                        </span>
-                        <span>
-                          {present}
-                        </span>
-                      </Flex>
-                    </List.Header>
-                  </List.Item>
-                  <List.Item>
-                    <List.Header>
-                      <Flex justifyContent='space-between'>
-                        <span>
-                          Absent: 
-                        </span>
-                        <span>
-                          {absent}
-                        </span>
-                      </Flex>
-                    </List.Header>
-                  </List.Item>
-                  <List.Item>
-                    <List.Header>
-                      <Flex justifyContent='space-between'>
-                        <span>
-                          Tardy: 
-                        </span>
-                        <span>
-                          {tardy}
-                        </span>
-                      </Flex>
-                    </List.Header>
-                  </List.Item>
-                  <List.Item>
-                    <List.Header>
-                      <Flex justifyContent='space-between'>
-                        <span>
-                          Excused: 
-                        </span>
-                        <span>
-                          {excused}
-                        </span>
-                      </Flex>
-                    </List.Header>
-                  </List.Item>
+                  { [ 'present', 'absent', 'tardy', 'excused' ].map( record => {
+                      const total = totals[record] 
+                      const title = capitalize(record)
+                      return (
+                        <List.Item key={record}>
+                          <List.Header>
+                            <Flex justifyContent='space-between'>
+                              <span>
+                                {title}:
+                              </span>
+                              <span>
+                                {total}
+                              </span>
+                            </Flex>
+                          </List.Header>
+                        </List.Item>
+                      )
+                    })
+                  }
                   { gradesLoaded ? 
                     <List.Item>
                       <List.Header>
