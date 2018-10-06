@@ -19,7 +19,8 @@ class Record < ApplicationRecord
       next unless enrollment
       date = row[:date].to_date
       record = enrollment.records.find_or_create_by(day: date)
-      record.update(status: row[:status])
+      status = row[:status] == 'late' ? 'tardy' : row[:status]
+      record.update(status: status)
     end
   end
 end

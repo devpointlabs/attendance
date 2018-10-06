@@ -42,7 +42,7 @@ const Status = styled.div`
 
 const Record = ({ event: { title } }) => (
   <Status title={title}>
-    <Header as="h1" textAlign="center">
+    <Header as="h3" textAlign="center">
       {title}
     </Header>
   </Status>
