@@ -8,6 +8,16 @@ class Api::RecordsController < ApplicationController
     render json: r.reload
   end
 
+  def upload
+    data = CSV.parse(params[:file].tempfile, headers: true, header_converters: :symbol )
+    required_headers = [:id, :date, :status, :course]
+    if (required_headers - data.headers).empty?
+      Record.delay.upload(data)
+    else
+      render json: 'Missing Headers', status: 422
+    end
+  end
+
   def all_present
     course = Course.find(params[:course_id])
     date = Date::strptime(params[:date], "%m/%d/%Y")

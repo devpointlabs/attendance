@@ -9,4 +9,17 @@ class Record < ApplicationRecord
             AND records.enrollment_id = e.id")
     .where(day: date)
   end
+
+  def self.upload(data)
+    course = Course.find_by(canvas_id: data.first[:course])
+    data.each do |row|
+      course_id  = course.id
+      user_id = row[:id].to_i
+      enrollment = Enrollment.find_by(course_id: course_id, canvas_enrollment_id: user_id)
+      next unless enrollment
+      date = row[:date].to_date
+      record = enrollment.records.find_or_create_by(day: date)
+      record.update(status: row[:status])
+    end
+  end
 end

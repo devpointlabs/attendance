@@ -2,9 +2,22 @@ import React, { Component } from 'react';
 import { Card, Header, Container, Form, Divider, Dimmer, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
+import styled from 'styled-components'
 import { Flex } from './CommonStyles';
 import { setFlash } from '../reducers/flash'
 import CourseSetting from './CourseSetting'
+import DropZone from 'react-dropzone'
+
+const Drop = styled(DropZone)`
+  border: solid 1px lightgray;
+  height: 50px;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 class Settings extends Component {
   state = { courseId: '', loading: false, courses: [] }
@@ -65,6 +78,13 @@ class Settings extends Component {
     }
   }
 
+  onDrop = (files) => {
+    const data = new FormData()   
+    data.append('file', files[0])
+    axios.post('/api/upload_attendance', data)
+      .then( res => this.props.dispatch(setFlash('Importing Records..', 'green')) )
+  }
+
   render() {
     const { courseId, loading, courses } = this.state
     const itemsPerRow  = courses.length < 4 ? courses.length : 4
@@ -90,6 +110,15 @@ class Settings extends Component {
             />
             { loading ? this.loader() : <Form.Button>Import Course Data</Form.Button> }
           </Form>
+          <Drop
+            onDrop={this.onDrop}
+            accept="text/csv"
+            multiple={false}
+          >
+            <Header as="h4" textAlign="center">
+              Upload Attendance
+            </Header>
+          </Drop>
         </Flex>
       </Flex>
     </Container>

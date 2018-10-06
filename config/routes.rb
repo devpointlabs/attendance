@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     post '/reset_password', to: 'passwords#reset_password'
     post '/records/:course_id/all_present', to: 'records#all_present'
     resources :records, only: :create
+    post '/upload_attendance', to: 'records#upload'
     post '/records/:course_id/by_date', to: 'records#date'
     get '/records/:course_id/users/:id', to: 'records#individual'
     resources :enrollments
