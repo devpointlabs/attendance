@@ -17,6 +17,12 @@ const Pointer = styled.div`
   cursor: pointer;
 `
 
+const Picker = styled(DatePicker)`
+  .react-date-picker__button {
+    border: none !important;
+  }
+`
+
 class Course extends React.Component {
   state = {
     users: [],
@@ -81,9 +87,11 @@ class Course extends React.Component {
         <Arrow onClick={this.dateMinus} name="chevron left" />
         <Header as="h2">{dateString}</Header>
         <Arrow onClick={this.datePlus} name="chevron right" />
-        <DatePicker
+        <Picker
           value={date}
           onChange={this.handleDatePickerChange}
+          clearIcon={null}
+          calendarIcon={<Icon name="calendar" />}
         />
         <Flex>
           { !today && <Button primary onClick={this.today}>Today</Button> }
