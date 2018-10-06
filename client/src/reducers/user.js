@@ -8,7 +8,7 @@ export const login = (user) => {
   return { type: LOGIN, user };
 }
 
-const logout = () => {
+export const logout = () => {
   return { type: LOGOUT };
 }
 

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { login } from '../reducers/user';
+import { login, logout } from '../reducers/user';
 import axios from 'axios';
 
 class FetchUser extends Component {
@@ -16,7 +16,10 @@ class FetchUser extends Component {
           .then( res => {
             dispatch(login(res.data.data))
             this.loaded()
-          }).catch( () => this.loaded() )
+          }).catch( () => {
+            dispatch(logout())
+            this.loaded() 
+          })
       } else {
         this.loaded()
       }

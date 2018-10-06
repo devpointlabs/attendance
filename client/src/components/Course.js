@@ -73,8 +73,9 @@ class Course extends React.Component {
 
   datePicker = () => {
     const { date } = this.state
-    const dateString = date.toLocaleDateString()
-    const today = dateString === new Date().toLocaleDateString()
+    const thisDay = new Date().toLocaleDateString()
+    const dateString = date === null ? thisDay : date.toLocaleDateString()
+    const today = dateString === thisDay
     return (
       <Flex justifyContent="space-between" alignItems="center">
         <Arrow onClick={this.dateMinus} name="chevron left" />
