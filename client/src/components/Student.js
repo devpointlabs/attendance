@@ -40,6 +40,10 @@ const Status = styled.div`
   background-color: ${ props => colors[props.title] };
 `
 
+const CalContainer = styled.div`
+  height: 450px;
+`
+
 const Record = ({ event: { title } }) => (
   <Status title={title}>
     <Header as="h3" textAlign="center">
@@ -299,14 +303,16 @@ class Student extends React.Component {
               </Card.Content>
             </Card>
           </Flex>
-          <Calendar
-            localizer={localizer}
-            views={['month']}
-            events={this.getEvents()}
-            startAccessor="start"
-            endAccessor="end"
-            components={{ event: Record }}
-          />
+          <CalContainer>
+            <Calendar
+              localizer={localizer}
+              views={['month']}
+              events={this.getEvents()}
+              startAccessor="start"
+              endAccessor="end"
+              components={{ event: Record }}
+            />
+          </CalContainer>
           <Dropdown 
             options={this.dropdownOptions()} 
             value={filter}
