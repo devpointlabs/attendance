@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Calendar from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import '../calendar-overrides.css'
 import moment from 'moment'
 import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 import Permission from './Permission'
@@ -37,18 +38,29 @@ const Item = styled(List.Item)`
 `
 
 const Status = styled.div`
+  border: solid .5px black;
+  border-radius: 50px;
   background-color: ${ props => colors[props.title] };
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
 `
 
 const CalContainer = styled.div`
   height: 450px;
 `
 
+const StatusHeader = styled(Header)`
+  text-align: center;
+  padding: 5px 0px !important;
+`
+
 const Record = ({ event: { title } }) => (
   <Status title={title}>
-    <Header as="h3" textAlign="center">
-      {title}
-    </Header>
+    <StatusHeader as="h3">
+      {capitalize(title)}
+    </StatusHeader>
   </Status>
 )
 
