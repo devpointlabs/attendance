@@ -7,16 +7,20 @@ import store from './store';
 import 'semantic-ui-css/semantic.min.css';
 import { initMiddleware } from 'devise-axios';
 import ScrollToTop from './components/ScrollToTop';
+import { ThemeProvider } from 'styled-components'
+import theme from './theme';
 
 initMiddleware()
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ScrollToTop>
-        <App />
-      </ScrollToTop>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <ScrollToTop>
+          <App />
+        </ScrollToTop>
+      </BrowserRouter>
+    </ThemeProvider>
   </Provider>,
   document.getElementById('root')
 );

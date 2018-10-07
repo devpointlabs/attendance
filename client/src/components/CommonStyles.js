@@ -1,5 +1,14 @@
 import styled from 'styled-components'
-import { Form, Segment } from 'semantic-ui-react'
+import { Button, Form, Segment } from 'semantic-ui-react'
+
+export const CommonButton = styled(Button)`
+  background-color: ${ props => props.theme.primary } !important;
+  color: #FFF !important;
+`
+
+export const AuthWrapper = styled(Segment)`
+  background-color: ${ props => props.theme.secondary } !important;
+`
 
 export const Field = styled(Form.Field)`
   width: 400px !important;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
-import { AuthContainer, Field } from './CommonStyles';
+import { AuthContainer, AuthWrapper, Field, CommonButton } from './CommonStyles';
 
 class Login extends Component {
   state = { email: '', password: '' };
@@ -23,7 +23,7 @@ class Login extends Component {
     const { email, password } = this.state;
     return (
       <AuthContainer basic>
-        <Segment basic>
+        <AuthWrapper basic>
           <Header as='h1' textAlign='center'>Login</Header>
           <Form onSubmit={this.handleSubmit}>
             <Field>
@@ -47,9 +47,9 @@ class Login extends Component {
                 onChange={this.handleChange}
               />
             </Field>
-            <Button fluid primary type='submit'>Submit</Button>
+            <CommonButton fluid type='submit'>Submit</CommonButton>
           </Form>
-        </Segment>
+        </AuthWrapper>
       </AuthContainer>
     );
   }
