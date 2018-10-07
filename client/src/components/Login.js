@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Header, Segment, Form, Button, Container } from 'semantic-ui-react';
+import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
-import styled from 'styled-components'
 import { AuthContainer, Field } from './CommonStyles';
 
 class Login extends Component {
