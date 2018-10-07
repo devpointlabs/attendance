@@ -1,4 +1,16 @@
 import styled from 'styled-components'
+import { Form, Segment } from 'semantic-ui-react'
+
+export const Field = styled(Form.Field)`
+  width: 400px !important;
+`
+
+export const AuthContainer = styled(Segment)`
+  margin-top: 5% !important;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
 
 export const Flex = styled.div`
   display: flex;

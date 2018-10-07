@@ -3,6 +3,7 @@ import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { setFlash } from '../reducers/flash';
+import { AuthContainer, Field } from './CommonStyles'
 
 class Register extends Component {
   state = { email: '' };
@@ -26,24 +27,24 @@ class Register extends Component {
   render() {
     const { email } = this.state;
     return (
-      <Segment basic>
-        <Header as='h1' textAlign='center'>Register</Header>
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Field>
-            <label htmlFor='email'>Canvas Email</label>
-            <input
-              required
-              id='email'
-              value={email}
-              placeholder='Email'
-              onChange={this.handleChange}
-            />
-          </Form.Field>
-          <Segment textAlign='center' basic>
-            <Button primary type='submit'>Submit</Button>
-          </Segment>
-        </Form>
-      </Segment>
+      <AuthContainer basic>
+        <Segment basic>
+          <Header as='h1' textAlign='center'>Register</Header>
+          <Form onSubmit={this.handleSubmit}>
+            <Field>
+              <label htmlFor='email'>Canvas Email</label>
+              <input
+                required
+                id='email'
+                value={email}
+                placeholder='Email'
+                onChange={this.handleChange}
+              />
+            </Field>
+            <Button fluid primary type='submit'>Submit</Button>
+          </Form>
+        </Segment>
+      </AuthContainer>
     );
   }
 }

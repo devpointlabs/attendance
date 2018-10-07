@@ -3,17 +3,7 @@ import { Header, Segment, Form, Button, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
 import styled from 'styled-components'
-
-const LoginContainer = styled(Segment)`
-  margin-top: 5% !important;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-`
-
-const Field = styled(Form.Field)`
-  width: 400px !important;
-`
+import { AuthContainer, Field } from './CommonStyles';
 
 class Login extends Component {
   state = { email: '', password: '' };
@@ -33,7 +23,7 @@ class Login extends Component {
   render() {
     const { email, password } = this.state;
     return (
-      <LoginContainer basic>
+      <AuthContainer basic>
         <Segment basic>
           <Header as='h1' textAlign='center'>Login</Header>
           <Form onSubmit={this.handleSubmit}>
@@ -61,7 +51,7 @@ class Login extends Component {
             <Button fluid primary type='submit'>Submit</Button>
           </Form>
         </Segment>
-      </LoginContainer>
+      </AuthContainer>
     );
   }
 }
