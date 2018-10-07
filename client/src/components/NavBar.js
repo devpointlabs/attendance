@@ -3,6 +3,15 @@ import { Menu } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { handleLogout } from '../reducers/user';
+import styled from 'styled-components'
+
+const Nav = styled(Menu)`
+  background-color: ${ props => props.theme.primary } !important;
+`
+
+const Item = styled(Menu.Item)`
+  color: #FFF !important;
+`
 
 class NavBar extends Component {
   rightNavs = () => {
@@ -12,12 +21,12 @@ class NavBar extends Component {
       const auth = ['settings', 'students', 'reports']
       const authLinks = auth.map( a => 
         <Link to={`/${a}`} key={a}>
-            <Menu.Item name={a} />
+            <Item name={a} />
         </Link>
       )
 
       const links = [
-          <Menu.Item
+          <Item
             key="logout"
             name="Logout"
             onClick={() => dispatch(handleLogout(history))}
@@ -34,10 +43,10 @@ class NavBar extends Component {
     return (
       <Menu.Menu position='right'>
         <Link to='/register'>
-          <Menu.Item name='Register' />
+          <Item name='Register' />
         </Link>
         <Link to='/login'>
-          <Menu.Item name='Login' />
+          <Item name='Login' />
         </Link>
       </Menu.Menu>
     );
@@ -46,12 +55,12 @@ class NavBar extends Component {
   render() {
     return (
       <div>
-        <Menu pointing secondary>
+        <Nav pointing secondary>
           <Link to='/'>
-            <Menu.Item name='home' />
+            <Item name='home' />
           </Link>
           { this.rightNavs() }
-        </Menu>
+        </Nav>
       </div>
     );
   }
