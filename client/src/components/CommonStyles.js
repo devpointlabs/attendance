@@ -2,8 +2,12 @@ import styled from 'styled-components'
 import { Header, Button, Form, Segment } from 'semantic-ui-react'
 
 export const CommonButton = styled(Button)`
-  background-color: ${ props => props.theme.primary } !important;
+  background-color: ${ props => props.theme.secondary } !important;
   color: #FFF !important;
+`
+
+export const WhiteLabel = styled.label`
+  color: white !important;
 `
 
 export const Text = styled(Header)`
@@ -11,11 +15,11 @@ export const Text = styled(Header)`
 `
 
 export const AuthWrapper = styled(Segment)`
-  background-color: ${ props => props.theme.secondary } !important;
+  background-color: ${ props => props.theme.primary } !important;
 `
 
 export const Field = styled(Form.Field)`
-  width: 400px !important;
+  width: 500px !important;
 `
 
 export const AuthContainer = styled(Segment)`

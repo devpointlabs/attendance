@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
-import { Text, AuthContainer, AuthWrapper, Field, CommonButton } from './CommonStyles';
+import { 
+  Text, 
+  AuthContainer, 
+  AuthWrapper, 
+  Field, 
+  CommonButton,
+  WhiteLabel,
+} from './CommonStyles';
 
 class Login extends Component {
   state = { email: '', password: '' };
@@ -27,7 +34,7 @@ class Login extends Component {
           <Text as='h1' textAlign='center'>Login</Text>
           <Form onSubmit={this.handleSubmit}>
             <Field>
-              <label htmlFor='email'>Email</label>
+              <WhiteLabel htmlFor='email'>Email</WhiteLabel>
               <input
                 required
                 id='email'
@@ -37,7 +44,7 @@ class Login extends Component {
               />
             </Field>
             <Field>
-              <label htmlFor='password'>Password</label>
+              <WhiteLabel htmlFor='password'>Password</WhiteLabel>
               <input
                 required
                 id='password'
