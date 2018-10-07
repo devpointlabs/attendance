@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import { Header, Segment, Form, Button, Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
+import styled from 'styled-components'
+
+const LoginContainer = styled(Segment)`
+  margin-top: 5% !important;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`
+
+const Field = styled(Form.Field)`
+  width: 400px !important;
+`
 
 class Login extends Component {
   state = { email: '', password: '' };
@@ -21,11 +33,11 @@ class Login extends Component {
   render() {
     const { email, password } = this.state;
     return (
-      <Container>
+      <LoginContainer basic>
         <Segment basic>
           <Header as='h1' textAlign='center'>Login</Header>
           <Form onSubmit={this.handleSubmit}>
-            <Form.Field>
+            <Field>
               <label htmlFor='email'>Email</label>
               <input
                 required
@@ -34,8 +46,8 @@ class Login extends Component {
                 placeholder='Email'
                 onChange={this.handleChange}
               />
-            </Form.Field>
-            <Form.Field>
+            </Field>
+            <Field>
               <label htmlFor='password'>Password</label>
               <input
                 required
@@ -45,13 +57,11 @@ class Login extends Component {
                 type='password'
                 onChange={this.handleChange}
               />
-            </Form.Field>
-            <Segment textAlign='center' basic>
-              <Button primary type='submit'>Submit</Button>
-            </Segment>
+            </Field>
+            <Button fluid primary type='submit'>Submit</Button>
           </Form>
         </Segment>
-      </Container>
+      </LoginContainer>
     );
   }
 }
