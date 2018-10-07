@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Segment, Form, Button } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
 import { Text, AuthContainer, AuthWrapper, Field, CommonButton } from './CommonStyles';
