@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
-import { AuthContainer, AuthWrapper, Field, CommonButton } from './CommonStyles';
+import { Text, AuthContainer, AuthWrapper, Field, CommonButton } from './CommonStyles';
 
 class Login extends Component {
   state = { email: '', password: '' };
@@ -24,7 +24,7 @@ class Login extends Component {
     return (
       <AuthContainer basic>
         <AuthWrapper basic>
-          <Header as='h1' textAlign='center'>Login</Header>
+          <Text as='h1' textAlign='center'>Login</Text>
           <Form onSubmit={this.handleSubmit}>
             <Field>
               <label htmlFor='email'>Email</label>

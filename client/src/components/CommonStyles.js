@@ -1,8 +1,12 @@
 import styled from 'styled-components'
-import { Button, Form, Segment } from 'semantic-ui-react'
+import { Header, Button, Form, Segment } from 'semantic-ui-react'
 
 export const CommonButton = styled(Button)`
   background-color: ${ props => props.theme.primary } !important;
+  color: #FFF !important;
+`
+
+export const Text = styled(Header)`
   color: #FFF !important;
 `
 

@@ -3,7 +3,7 @@ import { Header, Segment, Form, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { setFlash } from '../reducers/flash';
-import { AuthContainer, Field, AuthWrapper, CommonButton } from './CommonStyles'
+import { Text, AuthContainer, Field, AuthWrapper, CommonButton } from './CommonStyles'
 
 class Register extends Component {
   state = { email: '' };
@@ -29,7 +29,7 @@ class Register extends Component {
     return (
       <AuthContainer basic>
         <AuthWrapper basic>
-          <Header as='h1' textAlign='center'>Register</Header>
+          <Text as='h1' textAlign='center'>Register</Text>
           <Form onSubmit={this.handleSubmit}>
             <Field>
               <label htmlFor='email'>Canvas Email</label>
