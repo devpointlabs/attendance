@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Message, Container, Header } from 'semantic-ui-react';
+import { Message, Header } from 'semantic-ui-react';
 import { clearFlash } from '../reducers/flash';
 import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
+
+const Container = styled(Message)`
+  margin: 0 2px !important;
+`
 
 class Flash extends Component { 
   componentDidUpdate(prevProps) {
@@ -25,7 +30,7 @@ class Flash extends Component {
   fadeFlash = dispatch => {
     setTimeout(() => {
       dispatch(clearFlash());
-    }, 15000);
+    }, this.props.duration || 10000);
   }
 
   render() {
@@ -33,14 +38,12 @@ class Flash extends Component {
 
     if (message) {
       return (
-        <Container style={{ marginTop: '40px' }}>
-          <Message
-            onDismiss={() => dispatch(clearFlash())}
-            color={color}
-          >
-            <Header as='h5' textAlign='center'>{message}</Header>
-            {this.fadeFlash(dispatch)}
-          </Message>
+        <Container
+          onDismiss={() => dispatch(clearFlash())}
+          color={color}
+        >
+          <Header as='h5' textAlign='center'>{message}</Header>
+          {this.fadeFlash(dispatch)}
         </Container>
       );
     }
