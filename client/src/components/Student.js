@@ -74,7 +74,6 @@ class Student extends React.Component {
     gradesLoaded: false,
     grade: {},
     attendance: {},
-    weeks: [],
     progress: false,
   }
 
@@ -220,7 +219,7 @@ class Student extends React.Component {
 
   render() {
     const { currentUser } = this.props
-    const { user, filter, gradesLoaded, grade, weeks, progress } = this.state
+    const { user, filter, gradesLoaded, grade, progress } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const totals = { present, absent, tardy, excused }
     const records = user.records || []
@@ -329,7 +328,7 @@ class Student extends React.Component {
               </Card.Content>
             </Card>
           </Flex>
-          { progress && <Progress weeks={weeks} /> }
+          { progress && <Progress /> }
           <CalContainer>
             <Calendar
               localizer={localizer}
