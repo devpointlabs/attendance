@@ -22,6 +22,7 @@ import Permission from './Permission'
 import { setFlash } from '../reducers/flash'
 import { capitalize } from '../utils/strHelper'
 import { Flex } from './CommonStyles'
+import Progress from './Progress'
 
 const colors = { 
   present: '#c3e6cb',
@@ -73,6 +74,8 @@ class Student extends React.Component {
     gradesLoaded: false,
     grade: {},
     attendance: {},
+    weeks: [],
+    progress: false,
   }
 
   componentDidMount() {
@@ -115,6 +118,10 @@ class Student extends React.Component {
     return ['All', 'Present', 'Absent', 'Tardy', 'Excused'].map( text => {
       return { key: text, text, value: text.toLowerCase() }
     })
+  }
+
+  toggleProgress = () => {
+    this.setState( state => ({ progress: !state.progress }) )
   }
 
   calcTotals = () => {
@@ -213,7 +220,7 @@ class Student extends React.Component {
 
   render() {
     const { currentUser } = this.props
-    const { user, filter, gradesLoaded, grade } = this.state
+    const { user, filter, gradesLoaded, grade, weeks, progress } = this.state
     const { present, absent, tardy, excused } = this.calcTotals()
     const totals = { present, absent, tardy, excused }
     const records = user.records || []
@@ -223,10 +230,17 @@ class Student extends React.Component {
           permission="isStaff" 
           user={currentUser.is_admin ? currentUser : this.props.user}
         >
-            <Flex justifyContent="flex-end">
-              <Button color="green" onClick={this.genReport}>
-                Generate Report
-              </Button>
+            <Flex>
+              <Flex>
+                <Button color="green" onClick={this.genReport}>
+                  Generate Report
+                </Button>
+                { gradesLoaded &&
+                    <Button primary onClick={this.toggleProgress}>
+                      { progress ? 'Hide ' : 'Show ' }Progress
+                    </Button>
+                }
+              </Flex>
             </Flex>
           </Permission>
           <Flex justifyContent="space-around" flexWrap="wrap">
@@ -315,6 +329,7 @@ class Student extends React.Component {
               </Card.Content>
             </Card>
           </Flex>
+          { progress && <Progress weeks={weeks} /> }
           <CalContainer>
             <Calendar
               localizer={localizer}
