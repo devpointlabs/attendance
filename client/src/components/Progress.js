@@ -1,9 +1,5 @@
 import React from 'react'
 
-const Progress = ({ weeks }) => (
-  <div>
-    Progress placeholder
-  </div>
-)
+const Progress = ({ weeks }) => null
 
 export default Progress

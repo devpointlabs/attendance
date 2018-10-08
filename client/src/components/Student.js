@@ -233,7 +233,7 @@ class Student extends React.Component {
                 <CommonButton onClick={this.genReport}>
                   Generate Report
                 </CommonButton>
-                { gradesLoaded &&
+                { ( gradesLoaded && false ) &&
                     <CommonButton primary onClick={this.toggleProgress}>
                       { progress ? 'Hide ' : 'Show ' }Progress
                     </CommonButton>
