@@ -21,7 +21,7 @@ import { Cell, PieChart, Legend, Tooltip, Pie } from 'recharts'
 import Permission from './Permission'
 import { setFlash } from '../reducers/flash'
 import { capitalize } from '../utils/strHelper'
-import { Flex } from './CommonStyles'
+import { Flex, CommonButton } from './CommonStyles'
 import Progress from './Progress'
 
 const colors = { 
@@ -232,13 +232,13 @@ class Student extends React.Component {
         >
             <Flex>
               <Flex>
-                <Button color="green" onClick={this.genReport}>
+                <CommonButton onClick={this.genReport}>
                   Generate Report
-                </Button>
+                </CommonButton>
                 { gradesLoaded &&
-                    <Button primary onClick={this.toggleProgress}>
+                    <CommonButton primary onClick={this.toggleProgress}>
                       { progress ? 'Hide ' : 'Show ' }Progress
-                    </Button>
+                    </CommonButton>
                 }
               </Flex>
             </Flex>
