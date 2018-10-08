@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     resources :courses, only: [:index, :show, :destroy, :update] do
       resources :grade_weights, only: [:create, :update]
     end
-    get 'init_courses/:id', to: 'courses#init'
+    put 'courses/:id/update', to: 'courses#edit'
+    get 'init_courses/:id/update', to: 'courses#init'
     get 'courses/:course_id/grades/:user_id', to: 'courses#grades'
     post 'register', to: 'passwords#reset'
     post '/reset_password', to: 'passwords#reset_password'

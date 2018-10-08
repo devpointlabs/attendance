@@ -7,6 +7,7 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import DatePicker from 'react-date-picker'
 import styled from 'styled-components'
 import Permission from './Permission'
@@ -23,13 +24,31 @@ const Picker = styled(DatePicker)`
 class CourseCard extends React.Component {
   state = { showCal: false }
 
+  handleDateChange = (date) => {
+    const { id, updateCourse } = this.props
+    axios.put(`/api/courses/${id}/update`, { course: { course_start: date }})
+      .then( res => { 
+        updateCourse(res.data)
+        this.setState({ showCal: false })
+      })
+  }
+
+  normalizeDate = (date) => {
+    if (!date)
+      return new Date()
+
+    date = new Date(date)
+    return new Date( date.getTime() - date.getTimezoneOffset() * -60000 )
+  }
+
   checkStartDate = (date) => {
     const { showCal } = this.state
+    const actualDate = this.normalizeDate(date)
 
     if (showCal)
       return (
         <Picker 
-          value={date || new Date()}
+          value={actualDate}
           onChange={this.handleDateChange}
           clearIcon={null}
           caledarIcon={<Icon name="calendar" />}
@@ -42,7 +61,11 @@ class CourseCard extends React.Component {
         </Pointer>
       )
     } else {
-      return <span>{date.toLocaleDateString()}</span>
+      return (
+        <Pointer onClick={this.toggleShowCal}>
+          <Label tag color="blue">{actualDate.toLocaleDateString()}</Label>
+        </Pointer>
+      )
     }
   }
 

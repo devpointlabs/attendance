@@ -23,6 +23,16 @@ class Api::CoursesController < ApplicationController
     end
   end
 
+  def edit
+    course = Course.find(params[:id])
+    params[:course][:date] = params[:course][:date].to_date if params[:course][:date]
+    if course.update(course_params)
+      render json: course
+    else
+      render_error(course)
+    end
+  end
+
   def update
     # Restore from deleted_at
     course = Course.with_deleted.find(params[:id])
@@ -51,4 +61,9 @@ class Api::CoursesController < ApplicationController
     course = enrollment.course
     render json: { weights: course.grade_weight, grades: Course.grades(params[:course_id], enrollment) }
   end
+
+  private
+    def course_params
+      params.require(:course).permit(:name, :course_start, :weeks)
+    end
 end

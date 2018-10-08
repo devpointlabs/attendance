@@ -17,6 +17,16 @@ class Home extends React.Component {
       .then( res => this.setState({ courses: res.data }) ) 
   }
 
+  updateCourse = (course) => {
+    this.setState({
+      courses: this.state.courses.map( c => {
+        if (course.id === c.id)
+          return course
+        return c
+      })
+    })
+  }
+
   archive = (id) => {
     const { type } = this.props
     const method = type ? 'put' : 'delete'
@@ -61,8 +71,10 @@ class Home extends React.Component {
         <Card.Group itemsPerRow={4} stackable>
           { courses.map( c => 
               <CourseCard
+                key={c.id}
                 {...c}
                 genReport={this.genReport}
+                updateCourse={this.updateCourse}
                 showConfirm={this.showConfirm}
                 user={user}
                 type={type}
