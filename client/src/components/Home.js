@@ -1,11 +1,11 @@
 import React from 'react'
 import axios from 'axios'
-import { Button, Card, Header, Container, Divider } from 'semantic-ui-react'
+import { Label, Button, Card, Header, Container, Divider } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { roles } from '../utils/strHelper'
 import Permission from './Permission'
-import { Flex } from './CommonStyles'
+import { Flex, Pointer } from './CommonStyles'
 import { setFlash } from '../reducers/flash'
 import Confirm from './Confirm'
 
@@ -41,6 +41,18 @@ class Home extends React.Component {
     this.setState({ archiving: id, showConfirm: true })
   }
 
+  checkStartDate = (date) => {
+    if (!date) {
+      return ( 
+        <Pointer onClick={this.toggleShowCal}>
+          <Label tag color="red">! Start Date</Label>
+        </Pointer>
+      )
+    } else {
+      return <span>{date.toLocaleDateString()}</span>
+    }
+  }
+
   render() {
     const { courses, showConfirm } = this.state
     const { user, type } = this.props
@@ -60,7 +72,7 @@ class Home extends React.Component {
         <Divider />
         <Card.Group itemsPerRow={4} stackable>
           { courses.map( c => {
-              const { name, id, role = 'admin' } = c
+              const { name, id, weeks, course_start, role = 'admin' } = c
               const userRole = roles[role]
               return (
                 <Card key={id}>
@@ -76,6 +88,13 @@ class Home extends React.Component {
                   </Card.Content>
                   <Permission permission="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
                     <Card.Content extra>
+                      <Flex justifyContent="space-between">
+                        <span>Weeks: {weeks}</span>
+                        <Permission permission="isAdmin" user={user}>
+                          { this.checkStartDate(course_start) }
+                        </Permission>
+                      </Flex>
+                      <Divider />
                       <Flex justifyContent="space-between">
                         <Button 
                           color={ type === 'archived' ? "green" : "red" } 

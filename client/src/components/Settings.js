@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Header, Container, Form, Divider, Dimmer, Loader } from 'semantic-ui-react';
+import { 
+  Card, 
+  Header, 
+  Container, 
+  Form, 
+  Divider, 
+  Dimmer, 
+  Loader,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux'
 import axios from 'axios';
 import styled from 'styled-components'
