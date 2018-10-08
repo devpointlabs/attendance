@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_03_021035) do
+ActiveRecord::Schema.define(version: 2018_10_08_113432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,19 @@ ActiveRecord::Schema.define(version: 2018_10_03_021035) do
     t.json "standard"
     t.datetime "deleted_at"
     t.index ["course_id"], name: "index_grade_weights_on_course_id"
+  end
+
+  create_table "progresses", force: :cascade do |t|
+    t.date "week_start"
+    t.date "week_end"
+    t.float "assignments"
+    t.float "attendance"
+    t.float "total"
+    t.string "grade"
+    t.bigint "enrollment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enrollment_id"], name: "index_progresses_on_enrollment_id"
   end
 
   create_table "records", force: :cascade do |t|
@@ -121,5 +134,6 @@ ActiveRecord::Schema.define(version: 2018_10_03_021035) do
   add_foreign_key "enrollments", "courses"
   add_foreign_key "enrollments", "users"
   add_foreign_key "grade_weights", "courses"
+  add_foreign_key "progresses", "enrollments"
   add_foreign_key "records", "enrollments"
 end
