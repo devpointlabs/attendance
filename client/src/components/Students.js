@@ -3,6 +3,7 @@ import { Container, Divider, Input, Button, List, Image } from 'semantic-ui-reac
 import axios from 'axios'
 import Student from './Student'
 import styled from 'styled-components'
+import { CommonButton } from './CommonStyles'
 
 const Course = styled.h3`
   color: blue;
@@ -70,9 +71,9 @@ class Students extends React.Component {
     const { name, filtered, student } = this.state
     return (
       <Container>
+        <Divider hidden />
         { student.id ? 
             <Fragment>
-              <Divider hidden />
               <Button onClick={this.clearStudent}>Back To Search</Button>
               <Divider hidden />
               <Student courseId={student.course_id} user={student.id} />
@@ -80,13 +81,14 @@ class Students extends React.Component {
             :
             <Fragment>
               <Input
+                fluid
                 label={
                   name ?
-                  (<Button basic onClick={this.clearSearch}>
-                    Clear Search
-                  </Button> 
+                  (  <CommonButton basic onClick={this.clearSearch}>
+                       Clear Search
+                     </CommonButton> 
                   )
-                    :
+                  :
                     'Search'
                 }
                 value={name}
