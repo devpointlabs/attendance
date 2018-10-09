@@ -99,37 +99,37 @@ class Settings extends Component {
     return (
       <Container>
         <Divider hidden />
-        <Flex justifyContent="space-around">
+        <Flex justifyContent="space-around" flexWrap="wrap">
           <Card.Group itemsPerRow={itemsPerRow === 0 ? 1 : itemsPerRow} stackable>
           { courses.map( card =>  <CourseSetting key={card.id} course={card} /> ) }
-        </Card.Group>
-        <Flex paddingLeft={20} direction="column" alignItems="center">
-          <Header as='h1' textAlign='center'>Add A Course</Header>
-          <Form onSubmit={this.getCourseInfo}>
-            <Form.Input 
-              value={courseId} 
-              name="courseId"
-              label="Course Id"
-              type="number"
-              min="1"
-              step="1"
-              onChange={this.handleChange}
-              required
-            />
-            { loading ? this.loader() : <Form.Button>Import Course Data</Form.Button> }
-          </Form>
-          <Drop
-            onDrop={this.onDrop}
-            accept="text/csv"
-            multiple={false}
-          >
-            <Header as="h4" textAlign="center">
-              Upload Attendance
-            </Header>
-          </Drop>
+          </Card.Group>
+          <Flex direction="column" alignItems="center">
+            <Header as='h1' textAlign='center'>Add A Course</Header>
+            <Form onSubmit={this.getCourseInfo}>
+              <Form.Input 
+                value={courseId} 
+                name="courseId"
+                label="Course Id"
+                type="number"
+                min="1"
+                step="1"
+                onChange={this.handleChange}
+                required
+              />
+              { loading ? this.loader() : <Form.Button>Import Course Data</Form.Button> }
+            </Form>
+            <Drop
+              onDrop={this.onDrop}
+              accept="text/csv"
+              multiple={false}
+            >
+              <Header as="h4" textAlign="center">
+                Upload Attendance
+              </Header>
+            </Drop>
+          </Flex>
         </Flex>
-      </Flex>
-    </Container>
+      </Container>
     );
   }
 }
