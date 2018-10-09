@@ -9,6 +9,7 @@ import {
   Field, 
   CommonButton,
   WhiteLabel,
+  FlexForm,
 } from './CommonStyles';
 
 class Login extends Component {
@@ -32,7 +33,7 @@ class Login extends Component {
       <AuthContainer basic>
         <AuthWrapper basic>
           <Text as='h1' textAlign='center'>Login</Text>
-          <Form onSubmit={this.handleSubmit}>
+          <FlexForm onSubmit={this.handleSubmit}>
             <Field>
               <WhiteLabel htmlFor='email'>Email</WhiteLabel>
               <input
@@ -55,7 +56,7 @@ class Login extends Component {
               />
             </Field>
             <CommonButton fluid type='submit'>Submit</CommonButton>
-          </Form>
+          </FlexForm>
         </AuthWrapper>
       </AuthContainer>
     );

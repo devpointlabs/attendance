@@ -18,8 +18,15 @@ export const AuthWrapper = styled(Segment)`
   background-color: ${ props => props.theme.primary } !important;
 `
 
+export const FlexForm = styled(Form)`
+  display: flex;
+  flex-flow: wrap !important;
+  flex-direction: column;
+  maxWidth: 500px;
+`
+
 export const Field = styled(Form.Field)`
-  width: 500px !important;
+  width: 100% !important;
 `
 
 export const AuthContainer = styled(Segment)`

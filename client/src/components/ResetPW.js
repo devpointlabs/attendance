@@ -5,11 +5,21 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { setFlash } from '../reducers/flash'
 import { Link } from 'react-router-dom'
+import { 
+  AuthContainer,
+  AuthWrapper,
+  CommonButton,
+  FlexForm, 
+  Field,
+  WhiteLabel,
+  Text,
+} from './CommonStyles'
 
 const Error = styled.h4`
   text-align: center;
   color: red;
   font-weight: bold;
+  background-color: white !important;
 `
 
 class ResetPW extends React.Component {
@@ -64,34 +74,42 @@ class ResetPW extends React.Component {
       )
     } else {
       return (
-        <Container> 
-          { error && <Error>{error}</Error> }
-          { isReset  ?
-              <Link to="/login">
-                <Header as="h1" textAlign="center">Please Login</Header>
-              </Link>
-              :
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Input
-                label="Password"
-                name="password"
-                value={password}
-                onChange={this.handleChange}
-                type="password"
-                required
-              />
-              <Form.Input
-                label="Password Confirmation"
-                name="passwordConfirmation"
-                value={passwordConfirmation}
-                onChange={this.handleChange}
-                type="password"
-                required
-              />
-              <Form.Button>Submit</Form.Button>
-            </Form>
-          }
-        </Container>
+        <AuthContainer basic> 
+          <AuthWrapper basic>
+            { error && <Error>{error}</Error> }
+            { isReset  ?
+                <Link to="/login">
+                  <Text as="h1" textAlign="center">Please Login</Text>
+                </Link>
+                :
+              <FlexForm onSubmit={this.handleSubmit}>
+                <Field>
+                  <WhiteLabel htmlFor="password">Password</WhiteLabel>
+                  <Form.Input
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={this.handleChange}
+                    type="password"
+                    required
+                  />
+                </Field>
+                <Field>
+                  <WhiteLabel htmlFor="passwordConfirmation">Password</WhiteLabel>
+                  <Form.Input
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    value={passwordConfirmation}
+                    onChange={this.handleChange}
+                    type="password"
+                    required
+                  />
+                </Field>
+                <CommonButton fluid>Submit</CommonButton>
+              </FlexForm>
+            }
+          </AuthWrapper>
+        </AuthContainer>
       )
     }
   }
