@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { handleLogin } from '../reducers/user';
 import { 

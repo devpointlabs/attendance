@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Header, Container, Segment, Loader, Dimmer, Form } from 'semantic-ui-react'
+import { Segment, Loader, Dimmer, Form } from 'semantic-ui-react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { setFlash } from '../reducers/flash'
