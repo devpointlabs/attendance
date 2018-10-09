@@ -21,6 +21,10 @@ const Picker = styled(DatePicker)`
   }
 `
 
+const FlexButton = styled(Button)`
+  flex-grow: 1;
+`
+
 class CourseCard extends React.Component {
   state = { showCal: false }
 
@@ -100,26 +104,26 @@ class CourseCard extends React.Component {
         </Card.Content>
         <Permission permission="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
           <Card.Content extra>
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" flexWrap="wrap">
               <span>Weeks: {weeks}</span>
               <Permission permission="isAdmin" user={user}>
                 { this.checkStartDate(course_start) }
               </Permission>
             </Flex>
             <Divider />
-            <Flex justifyContent="space-between">
-              <Button
+            <Flex justifyContent="space-between" flexWrap="wrap">
+              <FlexButton
                 color={ type === 'archived' ? "green" : "red" }
                 onClick={() => showConfirm(id)}
               >
                 { type === 'archived' ? 'Restore' : 'Archive' }
-              </Button>
-              <Button
+              </FlexButton>
+              <FlexButton
                 color="blue"
                 onClick={() => genReport(id)}
               >
                 Run Report
-              </Button>
+              </FlexButton>
             </Flex>
           </Card.Content>
         </Permission>
