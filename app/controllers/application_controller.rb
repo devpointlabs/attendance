@@ -13,6 +13,10 @@ class ApplicationController < ActionController::API
 
 
   private
+    def admin_route
+      render json: 'Not Permitted', status: 401 unless current_user.is_admin
+    end
+
     def render_error(model, type = 'array', status = 422)
       case type
         when 'string'

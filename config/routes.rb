@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     post '/reports/courses/:course_id', to: 'reports#course_report'
     post '/reports/courses/:course_id/users/:id', to: 'reports#user_in_course'
     resources :reports, only: [:index, :show, :destroy]
+    resources :events
   end
 
   #Do not place any routes below this one
