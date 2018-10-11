@@ -36,7 +36,7 @@ class App extends Component {
             <AdminRoute exact path='/reports/:id' component={Report} />
             <AuthRoute exact path='/login' component={Login} />
             <AuthRoute exact path='/register' component={Register} />
-            <AuthRoute exact path='/api/auth/password/edit' component={ResetPW} />
+            <AuthRoute exact path='/reset_password' component={ResetPW} />
             <Route component={NoMatch} />
           </Switch>
         </FetchUser>
