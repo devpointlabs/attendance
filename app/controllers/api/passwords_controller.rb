@@ -19,6 +19,7 @@ class Api::PasswordsController < ApplicationController
     if user
       user.update(password: password)
     else
+      Rails.logger.error("ERROR: #{user.errors}")
       render json: 'Invalid Token', status: 422
     end
   end
