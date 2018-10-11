@@ -105,8 +105,8 @@ class CourseCard extends React.Component {
         <Permission permission="isTeacherOrAdmin" user={user.is_admin ? user : { role } }>
           <Card.Content extra>
             <Flex justifyContent="space-between" flexWrap="wrap">
-              <span>Weeks: {weeks}</span>
               <Permission permission="isAdmin" user={user}>
+                <span>Weeks: {weeks}</span>
                 { this.checkStartDate(course_start) }
               </Permission>
             </Flex>
