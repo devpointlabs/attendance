@@ -28,7 +28,7 @@ class Register extends Component {
       .then( res => { 
         dispatch(setFlash('Please check your email for password instructions', 'green'))
       })
-      .catch( err => console.log(e))
+      .catch( err => dispatch(setFlash(err.response.data, 'red')) )
   }
 
   render() {

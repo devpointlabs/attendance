@@ -6,8 +6,8 @@ class Api::PasswordsController < ApplicationController
     begin
       user = User.find_by!(email: email)
       user.send_reset_password_instructions
-    rescue  => e
-      render json: e, status: 422
+    rescue 
+      render json: 'Canvas User not Found.  Please try another email', status: 422
     end
   end
 
