@@ -6,7 +6,8 @@ class Api::PasswordsController < ApplicationController
     begin
       user = User.find_by!(email: email)
       user.send_reset_password_instructions
-    rescue 
+    rescue  => e
+      Rails.logger.error("ERROR: #{e}")
       render json: 'Canvas User not Found.  Please try another email', status: 422
     end
   end
