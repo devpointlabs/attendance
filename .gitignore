@@ -31,3 +31,11 @@ yarn-error.log
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+#build
+public/asset-manifest.json
+public/index.html
+public/manifest.json
+public/precache-manifest.*
+public/service-worker.js
+public/static/
