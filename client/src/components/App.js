@@ -1,22 +1,70 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import NoMatch from './NoMatch';
+import { Loader } from 'semantic-ui-react'
+import Loadable from 'react-loadable';
 import NavBar from './NavBar';
-import Login from './Login';
-import Register from './Register';
-import Flash from './Flash';
-import Home from './Home';
 import ProtectedRoute from './ProtectedRoute';
+import FetchUser from './FetchUser';
 import AuthRoute from './AuthRoute';
 import AdminRoute from './AdminRoute';
-import FetchUser from './FetchUser';
-import Settings  from './Settings';
-import ResetPW from './ResetPW';
-import Course from './Course';
-import ArchivedCourses from './ArchivedCourses';
-import Students from './Students';
-import Reports from './Reports';
-import Report from './Report';
+import Flash from './Flash';
+
+const Loading = () => <Loader active />
+
+const  NoMatch = Loadable({
+  loader: () => import('./NoMatch'),
+  loading: Loading,
+});
+
+const  Login = Loadable({
+  loader: () => import('./Login'),
+  loading: Loading,
+});
+
+const  Register = Loadable({
+  loader: () => import('./Register'),
+  loading: Loading,
+});
+
+const  Home = Loadable({
+  loader: () => import('./Home'),
+  loading: Loading,
+});
+
+const  Settings = Loadable({
+  loader: () => import('./Settings'),
+  loading: Loading,
+});
+
+const  ResetPW = Loadable({
+  loader: () => import('./ResetPW'),
+  loading: Loading,
+});
+
+const  Course = Loadable({
+  loader: () => import('./Course'),
+  loading: Loading,
+});
+
+const  ArchivedCourses = Loadable({
+  loader: () => import('./ArchivedCourses'),
+  loading: Loading,
+});
+
+const  Students = Loadable({
+  loader: () => import('./Students'),
+  loading: Loading,
+});
+
+const  Reports = Loadable({
+  loader: () => import('./Reports'),
+  loading: Loading,
+});
+
+const  Report = Loadable({
+  loader: () => import('./Report'),
+  loading: Loading,
+});
 
 class App extends Component {
   render() {
