@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Loader } from 'semantic-ui-react'
 import Loadable from 'react-loadable';
-import NavBar from './NavBar';
-import ProtectedRoute from './ProtectedRoute';
-import FetchUser from './FetchUser';
-import AuthRoute from './AuthRoute';
-import AdminRoute from './AdminRoute';
-import Flash from './Flash';
 
 const Loading = () => <Loader active />
 
@@ -15,6 +9,43 @@ const  NoMatch = Loadable({
   loader: () => import('./NoMatch'),
   loading: Loading,
 });
+
+const  NavBar = Loadable({
+  loader: () => import('./NavBar'),
+  loading: Loading,
+  delay: 300,
+});
+
+const  Flash = Loadable({
+  loader: () => import('./Flash'),
+  loading: Loading,
+  delay: 300,
+});
+
+const  ProtectedRoute = Loadable({
+  loader: () => import('./ProtectedRoute'),
+  loading: Loading,
+  delay: 300,
+});
+
+const  FetchUser = Loadable({
+  loader: () => import('./FetchUser'),
+  loading: Loading,
+  delay: 300,
+});
+
+const  AdminRoute = Loadable({
+  loader: () => import('./AdminRoute'),
+  loading: Loading,
+  delay: 300,
+});
+
+const  AuthRoute = Loadable({
+  loader: () => import('./AuthRoute'),
+  loading: Loading,
+  delay: 300,
+});
+
 
 const  Login = Loadable({
   loader: () => import('./Login'),
